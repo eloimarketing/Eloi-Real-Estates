@@ -1,103 +1,187 @@
-import Image from "next/image";
+import HeroPage from '@/components/homepage/hero-page'
+import MaxWidthWrapper from '@/components/max-width-wrapper'
+import PropertyCard from '@/components/property-card'
+import { Badge } from '@/components/ui/badge'
+import { Handshake } from 'lucide-react'
+import Image from 'next/image'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { PropertyType } from '@prisma/client'
+import GoogleMapWithPins from '@/components/google-maps-with-pins'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+	const properties = [
+		{
+			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
+			propertyType: 'Apartment_Flat',
+			city: 'Kota',
+			price: '3000',
+			listingType: 'Rent',
+			image: '/assets/images/hero.webp',
+		},
+		{
+			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
+			propertyType: 'Apartment_Flat',
+			city: 'Kota',
+			price: '3000',
+			listingType: 'Rent',
+			image: '/assets/images/hero.webp',
+		},
+		{
+			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
+			propertyType: 'Apartment_Flat',
+			city: 'Kota',
+			price: '3000',
+			listingType: 'Rent',
+			image: '/assets/images/hero.webp',
+		},
+		{
+			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
+			propertyType: 'Apartment_Flat',
+			city: 'Kota',
+			price: '3000',
+			listingType: 'Rent',
+			image: '/assets/images/hero.webp',
+		},
+		{
+			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
+			propertyType: 'Apartment_Flat',
+			city: 'Kota',
+			price: '3000',
+			listingType: 'Rent',
+			image: '/assets/images/hero.webp',
+		},
+	]
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	const propertyList = [
+		{ lat: 28.6139, lng: 77.209, title: 'Delhi Property' },
+		{ lat: 19.076, lng: 72.8777, title: 'Mumbai Property' },
+		{ lat: 12.9716, lng: 77.5946, title: 'Bangalore Property' },
+		{ lat: 25.151678721632155, lng: 75.8576398520468, title: 'My House' },
+	]
+
+	return (
+		<div className="bg-secondary">
+			<div className="min-h-[calc(100dvh-5rem)]">
+				<MaxWidthWrapper>
+					<HeroPage />
+				</MaxWidthWrapper>
+
+				{/* CTA Banner */}
+				<div className="text-white text-xs sm:text-sm text-center my-6 sm:my-10 bg-[#384d6c] w-full p-3 sm:p-4 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
+					<div className="flex items-center gap-2">
+						<Handshake width={20} height={20} className="flex-shrink-0" />
+						<span className="text-center sm:text-left">
+							Connecting property owners and buyers seamlessly — from listing to living.
+						</span>
+					</div>
+					<Badge variant={'secondary'} className="text-xs rounded-sm py-1 mt-2 sm:mt-0">
+						Find Property
+					</Badge>
+				</div>
+
+				<MaxWidthWrapper className="flex flex-col">
+					{/* Feature Icons */}
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 w-full py-6 sm:py-10 px-4 sm:px-0">
+						{/* Avoid Brokers */}
+						<div className="max-w-64 mx-auto text-[#464646] text-center flex flex-col justify-center items-center">
+							<Image src={'/assets/icons/no-broker.png'} width={81} height={74} alt="hero" className="w-16 h-16 sm:w-20 sm:h-20" />
+							<h3 className="text-base sm:text-lg font-medium mt-2">Avoid Brokers</h3>
+							<p className="line-clamp-2 text-xs font-medium mt-1 px-2">
+								We directly connect you to verified owners to save brokerage
+							</p>
+						</div>
+
+						{/* Free Listing */}
+						<div className="max-w-64 mx-auto text-[#464646] text-center flex flex-col justify-center items-center">
+							<Image
+								src={'/assets/icons/free-listing.png'}
+								width={47}
+								height={72}
+								alt="hero"
+								className="w-12 h-16 sm:w-14 sm:h-20"
+							/>
+							<h3 className="text-base sm:text-lg font-medium mt-2">Free Listing</h3>
+							<p className="line-clamp-2 text-xs font-medium mt-1 px-2">Easy listing process. Also using WhatsApp</p>
+						</div>
+
+						{/* Shortlist Without Visit */}
+						<div className="max-w-64 mx-auto text-[#464646] text-center flex flex-col justify-center items-center">
+							<Image src={'/assets/icons/house.png'} width={47} height={72} alt="hero" className="w-16 h-16 sm:w-20 sm:h-20" />
+							<h3 className="text-base sm:text-lg font-medium mt-2">Shortlist without Visit</h3>
+							<p className="line-clamp-2 text-xs font-medium mt-1 px-2">Extensive Information makes it easy</p>
+						</div>
+
+						{/* Rental Agreement */}
+						<div className="max-w-64 mx-auto text-[#464646] text-center flex flex-col justify-center items-center">
+							<Image src={'/assets/icons/agreement.png'} width={47} height={72} alt="hero" className="w-12 h-16 sm:w-14 sm:h-20" />
+							<h3 className="text-base sm:text-lg font-medium mt-2">Rental Agreement</h3>
+							<p className="line-clamp-2 text-xs mt-1 font-medium px-2">Assistance in creating Rental agreement &amp; Paper work</p>
+						</div>
+					</div>
+
+					{/* Properties Sections */}
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Featured Properties</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{properties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Kolkata</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{properties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Bangalore</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{properties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+				</MaxWidthWrapper>
+
+				{/* Property Types Navigation */}
+				<div className="w-full bg-muted flex border-y gap-2 sm:gap-4 lg:gap-8 my-6 sm:my-10 overflow-x-auto scrollbar-hide">
+					{Object.keys(PropertyType).map((property, indx) => (
+						<div
+							key={indx}
+							className="text-[#464646] hover:bg-secondary font-semibold px-3 sm:px-4 py-6 sm:py-8 hover:cursor-pointer whitespace-nowrap text-sm sm:text-base flex-shrink-0">
+							{property}
+						</div>
+					))}
+				</div>
+
+				{/* Google Map */}
+				<MaxWidthWrapper className="px-4 sm:px-6 md:px-0">
+					<GoogleMapWithPins properties={propertyList} />
+				</MaxWidthWrapper>
+			</div>
+		</div>
+	)
 }

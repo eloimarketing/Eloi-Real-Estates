@@ -1,0 +1,382 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  BUYER
+  SELLER
+}
+
+enum PropertyType {
+  Apartment_Flat
+  Independent_House_Villa
+  Plot_Land
+  Office_Space
+  Shop_Showroom
+  Warehouse_Godown
+  Farmhouse_Agricultural_Land
+  CoWorking_Space
+  Paying_Guest_Hostel
+}
+
+enum ListingType {
+  FOR_SALE
+  FOR_RENT
+}
+
+enum FurnishingStatus {
+  UNFURNISHED
+  SEMI_FURNISHED
+  FULLY_FURNISHED
+}
+
+enum FacingDirection {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+  NORTH_EAST
+  NORTH_WEST
+  SOUTH_EAST
+  SOUTH_WEST
+}
+
+enum LandUseType {
+  RESIDENTIAL
+  COMMERCIAL
+  AGRICULTURAL
+}
+
+enum OwnershipType {
+  FREEHOLD
+  LEASEHOLD
+}
+
+enum LeaseStatus {
+  RENTED
+  VACANT
+}
+
+enum RoomType {
+  PRIVATE
+  SHARED
+  DORMITORY
+}
+
+// enum for Paying Guest and hostels
+enum DeskType {
+  HOT_DESK
+  PRIVATE_CABIN
+  DEDICATED_DESK
+}
+
+enum PropertyStatus {
+  ACTIVE // Active means that the property is ready to be listed
+  INACTIVE
+  SOLD
+  RENTED
+  PENDING
+}
+
+model User {
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  password    String
+  countryCode String
+  phoneNumber String
+  role        UserRole
+  avatarUrl   String?
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  properties Property[] @relation("PropertyOwner")
+  favorites  Favorite[]
+  inquiries  Inquiry[]
+
+  @@map("users")
+}
+
+model Property {
+  id           String         @id @default(cuid())
+  title        String
+  description  String
+  price        Float
+  images       String[]
+  videos       String[]
+  propertyType PropertyType
+  listingType  ListingType
+  status       PropertyStatus @default(ACTIVE)
+  googleMapLat Float?
+  googleMapLng Float?
+  isVerified   Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Foreign Keys
+  locationId String @unique
+  ownerId    String
+
+  // Relations
+  location  Location   @relation(fields: [locationId], references: [id])
+  owner     User       @relation("PropertyOwner", fields: [ownerId], references: [id])
+  favorites Favorite[]
+  inquiries Inquiry[]
+
+  // Property type specific relations
+  apartmentFlat         ApartmentFlat?
+  independentHouseVilla IndependentHouseVilla?
+  plotLand              PlotLand?
+  officeSpace           OfficeSpace?
+  shopShowroom          ShopShowroom?
+  industrialProperty    IndustrialProperty?
+  farmhouseAgricultural FarmhouseAgricultural?
+  coWorkingSpace        CoWorkingSpace?
+  warehouseGodown       WarehouseGodown?
+  payingGuestHostel     PayingGuestHostel?
+
+  @@map("properties")
+}
+
+model Location {
+  id      String @id @default(cuid())
+  address String
+  city    String
+  state   String
+  pincode String
+
+  properties Property[]
+
+  @@map("locations")
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  userId     String
+  propertyId String
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, propertyId])
+  @@map("favorites")
+}
+
+model Inquiry {
+  id         String   @id @default(cuid())
+  userId     String
+  propertyId String
+  message    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("inquiries")
+}
+
+model ApartmentFlat {
+  id               String           @id @default(cuid())
+  propertyId       String           @unique @default(cuid())
+  bhk              String // e.g., "2 BHK", "3 BHK"
+  carpetArea       Float
+  builtUpArea      Float
+  floorNumber      Int
+  totalFloors      Int
+  bathrooms        Int
+  furnishingStatus FurnishingStatus
+  balcony          Boolean          @default(false)
+  parking          Boolean          @default(false)
+  ageOfProperty    Int // in years
+  facingDirection  FacingDirection?
+  hasLift          Boolean          @default(false)
+  hasSecurity      Boolean          @default(false)
+  hasGym           Boolean          @default(false)
+  hasSwimmingPool  Boolean          @default(false)
+  hasPowerBackup   Boolean          @default(false)
+  hasGarden        Boolean          @default(false)
+  reraNumber       String?          @unique
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("apartment_flats")
+}
+
+model IndependentHouseVilla {
+  id                String           @id @default(cuid())
+  propertyId        String           @unique
+  bedrooms          Int
+  plotArea          Float
+  builtUpArea       Float
+  floors            String // e.g., "Ground + 1", "Ground + 2"
+  parking           Boolean          @default(false)
+  ageOfConstruction Int? // in years
+  furnishingStatus  FurnishingStatus
+  facingDirection   FacingDirection?
+  hasGardenLawn     Boolean          @default(false)
+  hasWaterSource    Boolean          @default(false)
+  hasPowerBackup    Boolean          @default(false)
+  hasSwimmingPool   Boolean          @default(false)
+  hasSecurity       Boolean          @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("independent_house_villas")
+}
+
+model PlotLand {
+  id              String           @id @default(cuid())
+  propertyId      String           @unique
+  plotArea        Float // in sq ft, sq yd, acres
+  plotAreaUnit    String           @default("sq_ft")
+  boundaryWall    Boolean          @default(false)
+  roadWidth       Float? // in feet
+  plotFacing      FacingDirection?
+  landUseType     LandUseType
+  gatedSociety    Boolean          @default(false)
+  ownershipType   OwnershipType
+  nearbyLandmarks String?
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("plot_lands")
+}
+
+model OfficeSpace {
+  id                 String           @id @default(cuid())
+  propertyId         String           @unique
+  carpetArea         Float
+  builtUpArea        Float
+  furnishingType     FurnishingStatus
+  workstations       Int              @default(0)
+  cabins             Int              @default(0)
+  conferenceRoom     Int              @default(0)
+  pantry             Boolean          @default(false)
+  washrooms          Int              @default(0)
+  floorNumber        Int
+  hasLift            Boolean          @default(false)
+  hasPowerBackup     Boolean          @default(false)
+  hasAirConditioning Boolean          @default(false)
+  parking            Boolean          @default(false)
+  occupancyStatus    String? // Occupied, Vacant
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("office_spaces")
+}
+
+model ShopShowroom {
+  id            String  @id @default(cuid())
+  propertyId    String  @unique
+  carpetArea    Float
+  frontageWidth Float? // in feet
+  floorNumber   Int
+  hasWashroom   Boolean @default(false)
+  powerLoad     Float? // in KW
+  parking       Boolean @default(false)
+  suitableFor   String? // Retail, Boutique, etc.
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("shop_showrooms")
+}
+
+model IndustrialProperty {
+  id             String  @id @default(cuid())
+  propertyId     String  @unique
+  builtUpArea    Float
+  plotArea       Float?
+  powerLoad      Float? // in KW
+  hasWaterSupply Boolean @default(false)
+  hasFireSafety  Boolean @default(false)
+  hasSecurity    Boolean @default(false)
+  roadAccess     Boolean @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("industrial_properties")
+}
+
+model FarmhouseAgricultural {
+  id                       String  @id @default(cuid())
+  propertyId               String  @unique
+  landArea                 Float
+  hasWaterSource           Boolean @default(false)
+  hasElectricityConnection Boolean @default(false)
+  hasFencing               Boolean @default(false)
+  hasRoadAccess            Boolean @default(false)
+  soilType                 String?
+  cropType                 String? // if any
+  hasFarmhouse             Boolean @default(false)
+  distanceToMainRoad       Float? // in km
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("farmhouse_agriculturals")
+}
+
+model CoWorkingSpace {
+  id                      String     @id @default(cuid())
+  propertyId              String     @unique
+  deskTypes               DeskType[]
+  numberOfSeats           Int
+  hasInternetAvailability Boolean    @default(true)
+  hasMeetingRoom          Boolean    @default(false)
+  hasPantry               Boolean    @default(false)
+  hasReception            Boolean    @default(false)
+  hasCommonAreas          Boolean    @default(false)
+  hasAirConditioning      Boolean    @default(false)
+  hasPowerBackup          Boolean    @default(false)
+  hasParking              Boolean    @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("coworking_spaces")
+}
+
+model WarehouseGodown {
+  id                      String  @id @default(cuid())
+  propertyId              String  @unique
+  builtUpArea             Float
+  floorHeight             Float // ceiling height
+  entryRoadWidth          Float? // in feet
+  hasPowerSupply          Boolean @default(false)
+  hasWaterAvailability    Boolean @default(false)
+  shutterHeight           Float? // in feet
+  hasLoadingUnloadingDock Boolean @default(false)
+  hasSecurity             Boolean @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("warehouse_godowns")
+}
+
+model PayingGuestHostel {
+  id                  String   @id @default(cuid())
+  propertyId          String   @unique
+  roomType            RoomType
+  furnished           Boolean  @default(false)
+  numberOfBeds        Int
+  hasAttachedWashroom Boolean  @default(false)
+  foodIncluded        Boolean  @default(false)
+  hasAC               Boolean  @default(false)
+  hasWifi             Boolean  @default(false)
+  hasHousekeeping     Boolean  @default(false)
+  hasLaundry          Boolean  @default(false)
+  guestRules          String[]
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("paying_guest_hostels")
+}
