@@ -3,13 +3,14 @@ import Image from 'next/image'
 import { buttonVariants } from './ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { Property } from '@prisma/client'
 
-export default function PropertyCard({ property }: { property: any }) {
+export default function PropertyCard({ property }: { property: Property }) {
 	return (
 		<div className="rounded-md overflow-hidden border shadow-sm">
 			<div className="h-58 overflow-hidden">
 				<Image
-					src={property.image}
+					src={property.images[0]}
 					alt="property"
 					width={1080}
 					height={1080}

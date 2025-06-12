@@ -6,7 +6,7 @@ declare module 'next-auth' {
 			firstName: string
 			lastName: string
 			email: string
-			role: 'ADMIN' | 'USER' | 'SELLER'
+			role: 'ADMIN' | 'BUYER' | 'SELLER'
 			image?: string | null
 		} & DefaultSession['user']
 	}
@@ -14,7 +14,7 @@ declare module 'next-auth' {
 		firstName: string
 		lastName: string
 		email: string
-		role: 'ADMIN' | 'USER' | 'SELLER'
+		role: 'ADMIN' | 'BUYER' | 'SELLER'
 		image?: string | null
 	}
 }

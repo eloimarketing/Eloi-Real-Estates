@@ -44,6 +44,9 @@ export async function POST(request: Request) {
 			googleMapLng: Number(formData.get('googleMapLng')),
 			listingType: (formData.get('availabilityStatus') as string) || 'FOR_SALE',
 			vendorContactNumber: formData.get('vendorContactNumber') as string,
+			propertyRent: Number(formData.get('propertyRent')),
+			securityDeposit: Number(formData.get('securityDeposit')),
+			advanceBookingAmount: Number(formData.get('advanceBookingAmount')),
 		}
 
 		let validatedPropertyInfo
@@ -79,7 +82,7 @@ export async function POST(request: Request) {
 				bedrooms: Number(formData.get('bedrooms')),
 				plotArea: Number(formData.get('plotArea')),
 				builtUpArea: Number(formData.get('builtUpArea')),
-				floors: formData.get('floors'),
+				floors: Number(formData.get('floors')),
 				parking: formData.get('parking') === 'true',
 				ageOfConstruction: Number(formData.get('ageOfConstruction')),
 				furnishingStatus: formData.get('furnishingStatus') as 'UNFURNISHED' | 'SEMI_FURNISHED' | 'FULLY_FURNISHED',
@@ -256,6 +259,9 @@ export async function POST(request: Request) {
 				status: 'ACTIVE',
 				googleMapLat: validatedPropertyInfo.googleMapLat,
 				googleMapLng: validatedPropertyInfo.googleMapLng,
+				propertyRent: validatedPropertyInfo.propertyRent,
+				securityDeposit: validatedPropertyInfo.securityDeposit,
+				advanceBookingAmount: validatedPropertyInfo.advanceBookingAmount,
 				isVerified: false,
 
 				location: {

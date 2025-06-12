@@ -102,25 +102,30 @@ model User {
   properties Property[] @relation("PropertyOwner")
   favorites  Favorite[]
   inquiries  Inquiry[]
+  Cart       Cart[]
+  WishList   WishList[]
 
   @@map("users")
 }
 
 model Property {
-  id           String         @id @default(cuid())
-  title        String
-  description  String
-  price        Float
-  images       String[]
-  videos       String[]
-  propertyType PropertyType
-  listingType  ListingType
-  status       PropertyStatus @default(ACTIVE)
-  googleMapLat Float?
-  googleMapLng Float?
-  isVerified   Boolean        @default(false)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id                   String         @id @default(cuid())
+  title                String
+  description          String
+  price                Float
+  images               String[]
+  videos               String[]
+  propertyType         PropertyType
+  listingType          ListingType
+  status               PropertyStatus @default(ACTIVE)
+  googleMapLat         Float?
+  googleMapLng         Float?
+  propertyRent         Float
+  securityDeposit      Float
+  advanceBookingAmount Float
+  isVerified           Boolean        @default(false)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
 
   // Foreign Keys
   locationId String @unique
@@ -143,6 +148,8 @@ model Property {
   coWorkingSpace        CoWorkingSpace?
   warehouseGodown       WarehouseGodown?
   payingGuestHostel     PayingGuestHostel?
+  Cart                  Cart[]
+  WishList              WishList[]
 
   @@map("properties")
 }
@@ -219,9 +226,9 @@ model IndependentHouseVilla {
   bedrooms          Int
   plotArea          Float
   builtUpArea       Float
-  floors            String // e.g., "Ground + 1", "Ground + 2"
+  floors            Int // e.g., "Ground + 1", "Ground + 2"
   parking           Boolean          @default(false)
-  ageOfConstruction Int? // in years
+  ageOfConstruction Int // in years
   furnishingStatus  FurnishingStatus
   facingDirection   FacingDirection?
   hasGardenLawn     Boolean          @default(false)
@@ -379,4 +386,27 @@ model PayingGuestHostel {
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@map("paying_guest_hostels")
+}
+
+model Cart {
+  id         Int    @id @default(autoincrement())
+  userId     String
+  propertyId String
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, propertyId])
+  @@map("carts")
+}
+
+model WishList {
+  id         Int    @id @default(autoincrement())
+  userId     String
+  propertyId String
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wishlists")
 }

@@ -8,11 +8,8 @@ type Property = {
 	title: string
 }
 
-interface GoogleMapWithPinsProps {
-	properties: Property[]
-}
-
-const GoogleMapWithPins: React.FC<GoogleMapWithPinsProps> = ({ properties }) => {
+const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
+	console.log(properties)
 	useEffect(() => {
 		const script = document.createElement('script')
 		script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQReifXIyF27pAqVclaTJDkboN1NCwZvI&callback=initMap'

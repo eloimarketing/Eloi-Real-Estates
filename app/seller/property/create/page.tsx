@@ -576,7 +576,7 @@ export default function CreatePropertyPage() {
 	}
 
 	return (
-		<div className="container mx-auto p-4 max-w-3xl">
+		<div className="container mx-auto py-4 max-w-3xl">
 			<Card>
 				<CardHeader>
 					<CardTitle>Create New Property Listing</CardTitle>

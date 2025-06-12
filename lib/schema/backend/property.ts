@@ -14,6 +14,9 @@ export const commonInfoSchema = z.object({
 	googleMapLng: z.number().min(1),
 	listingType: z.enum(['FOR_SALE', 'FOR_RENT']),
 	vendorContactNumber: z.string().min(1),
+	propertyRent: z.number().min(1),
+	securityDeposit: z.number().min(0),
+	advanceBookingAmount: z.number().min(0),
 })
 
 export const apartmentFlatSchema = z.object({
@@ -41,7 +44,7 @@ export const independentHouseVillaSchema = z.object({
 	bedrooms: z.number().min(1),
 	plotArea: z.number().min(1),
 	builtUpArea: z.number().min(1),
-	floors: z.string().min(1),
+	floors: z.number().min(1),
 	parking: z.boolean(),
 	ageOfConstruction: z.number().min(1),
 	furnishingStatus: z.enum(['UNFURNISHED', 'SEMI_FURNISHED', 'FULLY_FURNISHED']),

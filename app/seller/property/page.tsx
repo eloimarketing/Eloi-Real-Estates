@@ -1,4 +1,3 @@
-// components/AllProperties.tsx
 import prisma from '@/lib/prisma/prisma'
 import Image from 'next/image'
 import Link from 'next/link'

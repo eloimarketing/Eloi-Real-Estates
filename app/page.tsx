@@ -1,4 +1,3 @@
-import HeroPage from '@/components/homepage/hero-page'
 import MaxWidthWrapper from '@/components/max-width-wrapper'
 import PropertyCard from '@/components/property-card'
 import { Badge } from '@/components/ui/badge'
@@ -7,64 +6,31 @@ import Image from 'next/image'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { PropertyType } from '@prisma/client'
 import GoogleMapWithPins from '@/components/google-maps-with-pins'
+import prisma from '@/lib/prisma/prisma'
+import SearchBar from '@/components/homepage/search-bar'
+import Link from 'next/link'
 
-export default function Home() {
-	const properties = [
-		{
-			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
-			propertyType: 'Apartment_Flat',
-			city: 'Kota',
-			price: '3000',
-			listingType: 'Rent',
-			image: '/assets/images/hero.webp',
-		},
-		{
-			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
-			propertyType: 'Apartment_Flat',
-			city: 'Kota',
-			price: '3000',
-			listingType: 'Rent',
-			image: '/assets/images/hero.webp',
-		},
-		{
-			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
-			propertyType: 'Apartment_Flat',
-			city: 'Kota',
-			price: '3000',
-			listingType: 'Rent',
-			image: '/assets/images/hero.webp',
-		},
-		{
-			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
-			propertyType: 'Apartment_Flat',
-			city: 'Kota',
-			price: '3000',
-			listingType: 'Rent',
-			image: '/assets/images/hero.webp',
-		},
-		{
-			title: '1 BHK fully furnished flat for rent in white field in bangalore location area porch area',
-			propertyType: 'Apartment_Flat',
-			city: 'Kota',
-			price: '3000',
-			listingType: 'Rent',
-			image: '/assets/images/hero.webp',
-		},
-	]
-
-	const propertyList = [
-		{ lat: 28.6139, lng: 77.209, title: 'Delhi Property' },
-		{ lat: 19.076, lng: 72.8777, title: 'Mumbai Property' },
-		{ lat: 12.9716, lng: 77.5946, title: 'Bangalore Property' },
-		{ lat: 25.151678721632155, lng: 75.8576398520468, title: 'My House' },
-	]
+export default async function Home() {
+	const allProperties = await prisma.property.findMany()
+	const propertyList = allProperties.map(property => ({
+		lat: property.googleMapLat,
+		lng: property.googleMapLng,
+		title: property.title,
+	}))
 
 	return (
 		<div className="bg-secondary">
 			<div className="min-h-[calc(100dvh-5rem)]">
-				<MaxWidthWrapper>
-					<HeroPage />
+				<MaxWidthWrapper className="py-4">
+					<SearchBar />
 				</MaxWidthWrapper>
+				<div className="flex">
+					{propertyList.length > 0 && (
+						<MaxWidthWrapper className="px-4 sm:px-6 md:px-0">
+							<GoogleMapWithPins properties={propertyList} />
+						</MaxWidthWrapper>
+					)}
+				</div>
 
 				{/* CTA Banner */}
 				<div className="text-white text-xs sm:text-sm text-center my-6 sm:my-10 bg-[#384d6c] w-full p-3 sm:p-4 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
@@ -80,8 +46,84 @@ export default function Home() {
 				</div>
 
 				<MaxWidthWrapper className="flex flex-col">
+					{/* Properties Sections */}
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Featured Properties</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{allProperties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Kolkata</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{allProperties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Bangalore</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{allProperties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Delhi</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{allProperties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
+					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Jaipur</h1>
+						<Carousel className="">
+							<CarouselContent>
+								{allProperties.map((property, indx) => (
+									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+										<PropertyCard key={indx} property={property} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+
 					{/* Feature Icons */}
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 w-full py-6 sm:py-10 px-4 sm:px-0">
+					<div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 w-full py-6 sm:py-10">
 						{/* Avoid Brokers */}
 						<div className="max-w-64 mx-auto text-[#464646] text-center flex flex-col justify-center items-center">
 							<Image src={'/assets/icons/no-broker.png'} width={81} height={74} alt="hero" className="w-16 h-16 sm:w-20 sm:h-20" />
@@ -118,56 +160,10 @@ export default function Home() {
 							<p className="line-clamp-2 text-xs mt-1 font-medium px-2">Assistance in creating Rental agreement &amp; Paper work</p>
 						</div>
 					</div>
-
-					{/* Properties Sections */}
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Featured Properties</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{properties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
-
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Kolkata</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{properties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
-
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Bangalore</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{properties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
 				</MaxWidthWrapper>
 
 				{/* Property Types Navigation */}
-				<div className="w-full bg-muted flex border-y gap-2 sm:gap-4 lg:gap-8 my-6 sm:my-10 overflow-x-auto scrollbar-hide">
+				<div className="w-full bg-muted flex border-y gap-2 sm:gap-4 lg:gap-8 my-6 overflow-x-auto scrollbar-hide">
 					{Object.keys(PropertyType).map((property, indx) => (
 						<div
 							key={indx}
@@ -177,10 +173,12 @@ export default function Home() {
 					))}
 				</div>
 
-				{/* Google Map */}
-				<MaxWidthWrapper className="px-4 sm:px-6 md:px-0">
-					<GoogleMapWithPins properties={propertyList} />
-				</MaxWidthWrapper>
+				<div className="w-full text-center text-sm py-2 border z-50">
+					By using this site, you agree to our{' '}
+					<Link href="/terms" className="underline text-blue-600">
+						Terms and Conditions
+					</Link>
+				</div>
 			</div>
 		</div>
 	)

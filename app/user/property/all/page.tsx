@@ -1,4 +1,3 @@
-// components/AllProperties.tsx
 import prisma from '@/lib/prisma/prisma'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,6 +6,7 @@ export default async function AllProperties() {
 	const allProperties = await prisma.property.findMany({
 		include: {
 			apartmentFlat: true,
+			independentHouseVilla: true,
 			location: true,
 			owner: true,
 		},
@@ -28,7 +28,8 @@ export default async function AllProperties() {
 						<p className="text-gray-800 font-bold mb-2">₹{property.price.toLocaleString()}</p>
 
 						<div className="text-sm text-gray-600 mb-2">
-							<span className="mr-2 font-medium">Type:</span>Apartment / Flat
+							<span className="mr-2 font-medium">Type:</span>
+							{property.propertyType.replaceAll('_', ' ')}
 						</div>
 
 						{property.apartmentFlat && (
@@ -56,6 +57,38 @@ export default async function AllProperties() {
 								</li>
 								<li>
 									<strong>Parking:</strong> {property.apartmentFlat.parking ? 'Yes' : 'No'}
+								</li>
+							</ul>
+						)}
+
+						{property.independentHouseVilla && (
+							<ul className="text-sm text-gray-700 space-y-1 mb-3">
+								<li>
+									<strong>Bedrooms:</strong> {property.independentHouseVilla.bedrooms}
+								</li>
+								<li>
+									<strong>Plot Area:</strong> {property.independentHouseVilla.plotArea} sqft
+								</li>
+								<li>
+									<strong>Built-Up Area:</strong> {property.independentHouseVilla.builtUpArea} sqft
+								</li>
+								<li>
+									<strong>Floors:</strong> {property.independentHouseVilla.floors}
+								</li>
+								<li>
+									<strong>Parking:</strong> {property.independentHouseVilla.parking ? 'Yes' : 'No'}
+								</li>
+								<li>
+									<strong>Age of Construction:</strong> {property.independentHouseVilla.ageOfConstruction}
+								</li>
+								<li>
+									<strong>Furnishing:</strong> {property.independentHouseVilla.furnishingStatus}
+								</li>
+								<li>
+									<strong>Facing:</strong> {property.independentHouseVilla.facingDirection || 'N/A'}
+								</li>
+								<li>
+									<strong>Has Garden Lawn:</strong> {property.independentHouseVilla.hasGardenLawn ? 'Yes' : 'No'}
 								</li>
 							</ul>
 						)}
