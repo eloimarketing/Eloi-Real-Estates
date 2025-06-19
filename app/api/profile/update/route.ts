@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import prisma from '@/lib/prisma/prisma'
 import { auth } from '@/auth'

@@ -13,9 +13,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { commonInfoSchema, independentHouseVillaSchema } from '@/lib/schema/frontend/property'
+import { commonInfoSchema, plotLandSchema } from '@/lib/schema/frontend/property'
 
-const FormSchema = commonInfoSchema.merge(independentHouseVillaSchema)
+const FormSchema = commonInfoSchema.merge(plotLandSchema)
 
 export default function IndependentHouseVillaForm() {
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -37,17 +37,14 @@ export default function IndependentHouseVillaForm() {
 			propertyRent: '0',
 			securityDeposit: '0',
 			advanceBookingAmount: '0',
-			bedrooms: 0,
 			plotArea: 0,
-			builtUpArea: 0,
-			floors: 0,
-			ageOfConstruction: 0,
-			parking: false,
-			hasGardenLawn: false,
-			hasWaterSource: false,
-			hasSecurity: false,
-			hasSwimmingPool: false,
-			hasPowerBackup: false,
+			plotAreaUnit: 'sq_ft',
+			boundaryWall: false,
+			roadWidth: 0,
+			plotFacing: undefined,
+			landUseType: 'RESIDENTIAL',
+			gatedSociety: false,
+			ownershipType: 'FREEHOLD',
 			images: [],
 			videos: [],
 		},

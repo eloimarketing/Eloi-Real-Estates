@@ -1,14 +1,18 @@
 import MaxWidthWrapper from '@/components/max-width-wrapper'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import Image from 'next/image'
-import { IndependentHouseVilla, Location, Property, User } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
-export default function IndependentHouseVillaViewPage({
-	property,
-}: {
-	property: Property & { owner: User; location: Location; independentHouseVilla: IndependentHouseVilla }
-}) {
-	const independentHouseVilla = property.independentHouseVilla
+type PropertyWithAll = Prisma.PropertyGetPayload<{
+	include: {
+		independentHouseVilla: true
+		location: true
+		owner: true
+	}
+}>
+
+export default function IndependentHouseVillaViewPage({ property }: { property: PropertyWithAll }) {
+	const independentHouseVilla = property.independentHouseVilla!
 	console.log(independentHouseVilla)
 	return (
 		<div>

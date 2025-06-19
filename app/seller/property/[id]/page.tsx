@@ -3,7 +3,7 @@ import IndependentHouseVillaViewPage from '@/components/pages/property-view/inde
 import prisma from '@/lib/prisma/prisma'
 import { notFound } from 'next/navigation'
 
-export default async function PropertyPage({ params }: { params: { id: string } }) {
+export default async function PropertyPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
 
 	const property = await prisma.property.findUnique({

@@ -55,3 +55,15 @@ export const independentHouseVillaSchema = z.object({
 	hasSwimmingPool: z.boolean(),
 	hasSecurity: z.boolean(),
 })
+
+export const plotLandSchema = z.object({
+	plotArea: z.number(),
+	plotAreaUnit: z.string(),
+	boundaryWall: z.boolean(),
+	roadWidth: z.number(),
+	plotFacing: z.enum(['NORTH', 'SOUTH', 'EAST', 'WEST', 'NORTH_EAST', 'NORTH_WEST', 'SOUTH_EAST', 'SOUTH_WEST']),
+	landUseType: z.enum(['RESIDENTIAL', 'COMMERCIAL', 'AGRICULTURAL']),
+	gatedSociety: z.boolean(),
+	ownershipType: z.enum(['FREEHOLD', 'LEASEHOLD']),
+	nearbyLandmarks: z.enum(['PetrolPump', 'Hospital', 'RailwayStation', 'School']),
+})

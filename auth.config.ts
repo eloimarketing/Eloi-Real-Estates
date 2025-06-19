@@ -66,7 +66,7 @@ export default {
 			if (token && session.user) {
 				session.user.id = token.id as string
 				session.user.image = token.image as string
-				session.user.role = token.role as 'ADMIN' | 'USER'
+				session.user.role = token.role as 'ADMIN' | 'BUYER' | 'SELLER'
 				session.user.firstName = token.firstName as string
 				session.user.lastName = token.lastName as string
 			}

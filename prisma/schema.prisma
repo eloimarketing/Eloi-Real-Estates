@@ -84,6 +84,13 @@ enum PropertyStatus {
   PENDING
 }
 
+enum NearbyLandmarks {
+  PetrolPump
+  Hospital
+  RailwayStation
+  School
+}
+
 model User {
   id          String   @id @default(cuid())
   firstName   String
@@ -243,17 +250,17 @@ model IndependentHouseVilla {
 }
 
 model PlotLand {
-  id              String           @id @default(cuid())
-  propertyId      String           @unique
+  id              String            @id @default(cuid())
+  propertyId      String            @unique
   plotArea        Float // in sq ft, sq yd, acres
-  plotAreaUnit    String           @default("sq_ft")
-  boundaryWall    Boolean          @default(false)
+  plotAreaUnit    String            @default("sq_ft")
+  boundaryWall    Boolean           @default(false)
   roadWidth       Float? // in feet
   plotFacing      FacingDirection?
   landUseType     LandUseType
-  gatedSociety    Boolean          @default(false)
+  gatedSociety    Boolean           @default(false)
   ownershipType   OwnershipType
-  nearbyLandmarks String?
+  nearbyLandmarks NearbyLandmarks[]
 
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 

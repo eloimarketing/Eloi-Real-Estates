@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import ApprovePropertyBtn from './approve-btn'
 import { Button } from '@/components/ui/button'
 
-export default async function PropertyPage({ params }: { params: { id: string } }) {
+export default async function PropertyPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
 
 	const property = await prisma.property.findUnique({
@@ -92,7 +92,7 @@ export default async function PropertyPage({ params }: { params: { id: string } 
 							<Info label="Bedrooms" value={houseVilla.bedrooms.toString()} />
 							<Info label="Plot Area" value={`${houseVilla.plotArea} sqft`} />
 							<Info label="Built-Up Area" value={`${houseVilla.builtUpArea} sqft`} />
-							<Info label="Floors" value={houseVilla.floors} />
+							<Info label="Floors" value={houseVilla.floors.toString()} />
 							<Info label="Parking" value={houseVilla.parking ? 'Yes' : 'No'} />
 							<Info
 								label="Age of Construction"

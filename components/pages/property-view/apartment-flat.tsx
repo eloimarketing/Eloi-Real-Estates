@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
 	Heart,
 	Share2,
 	ShoppingCart,
 	MapPin,
 	Car,
-	Droplets,
 	Zap,
 	Shield,
 	Building2,
@@ -16,7 +15,6 @@ import {
 	Waves,
 	User as UserIcon,
 	Home,
-	Users,
 	Bath,
 	Mountain,
 	ArrowUp,

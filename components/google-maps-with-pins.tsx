@@ -16,6 +16,7 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		script.async = true
 		script.defer = true
 		document.body.appendChild(script)
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		;(window as any).initMap = function () {
 			const center = { lat: 23.2599, lng: 77.4126 }
 
@@ -34,6 +35,7 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		}
 
 		return () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			delete (window as any).initMap
 		}
 	}, [properties])

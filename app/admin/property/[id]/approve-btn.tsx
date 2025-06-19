@@ -15,7 +15,7 @@ export default function ApprovePropertyBtn({ propertyId }: { propertyId: string 
 		setLoading(true)
 		try {
 			const res = await axios.post('/api/admin/property/approve', { propertyId })
-			const data = res.data
+			// const data = res.data
 
 			if (res.status === 200) {
 				toast.success('Property approved successfully!')

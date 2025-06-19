@@ -13,9 +13,9 @@ import Link from 'next/link'
 export default async function Home() {
 	const allProperties = await prisma.property.findMany()
 	const propertyList = allProperties.map(property => ({
-		lat: property.googleMapLat,
-		lng: property.googleMapLng,
-		title: property.title,
+		lat: property.googleMapLat!,
+		lng: property.googleMapLng!,
+		title: property.title!,
 	}))
 
 	return (
