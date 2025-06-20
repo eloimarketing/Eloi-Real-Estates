@@ -1,4 +1,4 @@
-import { ShoppingCart } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 import { buttonVariants } from './ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -24,10 +24,10 @@ export default function PropertyCard({ property }: { property: Property }) {
 					</div>
 					<Tooltip>
 						<TooltipTrigger className={cn('hover:cursor-pointer', buttonVariants({ variant: 'outline' }))}>
-							<ShoppingCart />
+							<ExternalLink />
 						</TooltipTrigger>
 						<TooltipContent>
-							<p>Add to Cart</p>
+							<p>View Property</p>
 						</TooltipContent>
 					</Tooltip>
 				</div>

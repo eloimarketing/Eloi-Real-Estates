@@ -16,7 +16,7 @@ export default async function Navbar() {
 
 	const fields = [
 		{ name: 'Home', href: '/' },
-		{ name: 'Properties', href: '/user/properties/all' },
+		{ name: 'Properties', href: '/user/property/all' },
 		{ name: 'Services', href: '/' },
 		{ name: 'Contact Us', href: '/' },
 	]

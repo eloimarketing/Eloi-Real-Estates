@@ -2,8 +2,45 @@ import prisma from '@/lib/prisma/prisma'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default async function AllProperties() {
+export default async function AllProperties({
+	searchParams,
+}: {
+	searchParams?: Promise<{
+		[key: string]: string | string[] | undefined
+	}>
+}) {
+	// @ts-expect-error // TODO: Fix this
+	const data = JSON.parse((await searchParams).data)
+	console.log(data)
+
+	const whereClause = {
+		listingType: data.listingType,
+		...(data.state || data.city
+			? {
+					location: {
+						...(data.state && { state: data.state }),
+						...(data.city && { city: data.city.toLowerCase() }),
+					},
+			  }
+			: {}),
+		...(data.propertyType && { propertyType: data.propertyType }),
+		...(data.query && {
+			OR: [
+				{ title: { contains: data.query, mode: 'insensitive' } },
+				{ description: { contains: data.query, mode: 'insensitive' } },
+			],
+		}),
+		...(data.priceRange &&
+			data.priceRange?.max && {
+				price: {
+					gte: data.priceRange.mins || 0,
+					lte: data.priceRange.max,
+				},
+			}),
+	}
+	console.log(whereClause, 'whereClause')
 	const allProperties = await prisma.property.findMany({
+		where: whereClause,
 		include: {
 			apartmentFlat: true,
 			independentHouseVilla: true,
@@ -11,7 +48,7 @@ export default async function AllProperties() {
 			owner: true,
 		},
 	})
-
+	console.log(allProperties)
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
 			{allProperties.map(property => (

@@ -11,12 +11,20 @@ import SearchBar from '@/components/homepage/search-bar'
 import Link from 'next/link'
 
 export default async function Home() {
-	const allProperties = await prisma.property.findMany()
+	const allProperties = await prisma.property.findMany({ include: { location: true } })
 	const propertyList = allProperties.map(property => ({
 		lat: property.googleMapLat!,
 		lng: property.googleMapLng!,
 		title: property.title!,
 	}))
+
+	const propertiesByCity = {}
+
+	allProperties.forEach(property => {
+		const city = property.location.city.trim().toLowerCase()
+		if (!propertiesByCity[city]) propertiesByCity[city] = []
+		propertiesByCity[city].push(property)
+	})
 
 	return (
 		<div className="bg-secondary">
@@ -46,8 +54,25 @@ export default async function Home() {
 				</div>
 
 				<MaxWidthWrapper className="flex flex-col">
+					{Object.keys(propertiesByCity).map((city, index) => (
+						<div className="px-10 sm:px-6 my-6 sm:my-10" key={index}>
+							<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in {city}</h1>
+							<Carousel className="">
+								<CarouselContent>
+									{propertiesByCity[city].map((property, indx) => (
+										<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+											<PropertyCard key={indx} property={property} />
+										</CarouselItem>
+									))}
+								</CarouselContent>
+								<CarouselPrevious />
+								<CarouselNext />
+							</Carousel>
+						</div>
+					))}
+
 					{/* Properties Sections */}
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+					{/* <div className="px-10 sm:px-6 my-6 sm:my-10">
 						<h1 className="text-xl sm:text-2xl font-bold mb-4">Featured Properties</h1>
 						<Carousel className="">
 							<CarouselContent>
@@ -62,7 +87,7 @@ export default async function Home() {
 						</Carousel>
 					</div>
 
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+					<div className="px-10 sm:px-6 my-6 sm:my-10">
 						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Kolkata</h1>
 						<Carousel className="">
 							<CarouselContent>
@@ -77,7 +102,7 @@ export default async function Home() {
 						</Carousel>
 					</div>
 
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+					<div className="px-10 sm:px-6 my-6 sm:my-10">
 						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Bangalore</h1>
 						<Carousel className="">
 							<CarouselContent>
@@ -92,14 +117,16 @@ export default async function Home() {
 						</Carousel>
 					</div>
 
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+					<div className="px-10 sm:px-6 my-6 sm:my-10">
 						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Delhi</h1>
 						<Carousel className="">
 							<CarouselContent>
 								{allProperties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
+									<Link key={indx} href={`/seller/property/${property.id}`}>
+										<CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+											<PropertyCard key={indx} property={property} />
+										</CarouselItem>
+									</Link>
 								))}
 							</CarouselContent>
 							<CarouselPrevious />
@@ -107,7 +134,7 @@ export default async function Home() {
 						</Carousel>
 					</div>
 
-					<div className="px-10 sm:px-6 md:px-0 my-6 sm:my-10">
+					<div className="px-10 sm:px-6 my-6 sm:my-10">
 						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Jaipur</h1>
 						<Carousel className="">
 							<CarouselContent>
@@ -120,7 +147,7 @@ export default async function Home() {
 							<CarouselPrevious />
 							<CarouselNext />
 						</Carousel>
-					</div>
+					</div> */}
 
 					{/* Feature Icons */}
 					<div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 w-full py-6 sm:py-10">

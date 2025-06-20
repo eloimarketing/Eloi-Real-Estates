@@ -25648,10 +25648,8 @@ export const nationalData = {
 }
 
 export const IndianStates = nationalData.states.filter(state => state.name)
-console.log(IndianStates)
 
 export function getCitiesByState({ stateName }: { stateName: string }) {
 	const citiesData = nationalData.states.find(state => state.name === stateName)?.cities
-	console.log(citiesData)
 	return citiesData
 }

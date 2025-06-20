@@ -60,7 +60,6 @@ export default function ApartmentFlatForm() {
 
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
 		setIsSubmitting(true)
-		console.log('running')
 		try {
 			const formData = new FormData()
 
