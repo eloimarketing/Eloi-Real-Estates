@@ -16,7 +16,7 @@ export default async function LoginPage() {
 		<div className="h-screen flex w-full absolute top-0 z-50 bg-white">
 			<div className="w-full md:w-1/2 h-full relative">
 				<Link href={'/'} className="flex items-center gap-2 sm:pl-10">
-					<Image src={'/logo.jpeg'} alt="logo" width={1536} height={1024} className="w-28" />
+					<Image src={'/assets/logo.jpeg'} alt="logo" width={1536} height={1024} className="w-28" />
 				</Link>
 
 				<div className="w-full flex justify-center items-center absolute top-1/2 -translate-y-1/2">

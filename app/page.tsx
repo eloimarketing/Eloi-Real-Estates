@@ -11,7 +11,7 @@ import SearchBar from '@/components/homepage/search-bar'
 import Link from 'next/link'
 
 export default async function Home() {
-	const allProperties = await prisma.property.findMany({ include: { location: true } })
+	const allProperties = await prisma.property.findMany({ where: { isVerified: true }, include: { location: true } })
 	const propertyList = allProperties.map(property => ({
 		lat: property.googleMapLat!,
 		lng: property.googleMapLng!,

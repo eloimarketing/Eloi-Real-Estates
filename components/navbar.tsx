@@ -25,7 +25,7 @@ export default async function Navbar() {
 		<div className="border-b shadow-md w-full h-20">
 			<MaxWidthWrapper className="flex justify-between items-center overflow-hidden">
 				<Link href={'/'} className="flex items-center gap-2">
-					<Image src={'/logo.jpeg'} alt="logo" width={1536} height={1024} className="w-28" />
+					<Image src={'/assets/logo.jpeg'} alt="logo" width={1536} height={1024} className="w-28" />
 				</Link>
 
 				<div className="mx-auto hidden sm:block">

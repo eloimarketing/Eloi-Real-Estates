@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import prisma from '@/lib/prisma/prisma'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -14,6 +15,7 @@ export default async function AllProperties({
 	console.log(data)
 
 	const whereClause = {
+		isVerified: true,
 		listingType: data.listingType,
 		...(data.state || data.city
 			? {
@@ -49,6 +51,20 @@ export default async function AllProperties({
 		},
 	})
 	console.log(allProperties)
+	if (allProperties.length === 0) {
+		return (
+			<div className="h-screen flex items-center justify-center w-full">
+				<div className="flex flex-col gap-4 items-center justify-center mx-auto">
+					<h1 className="text-3xl font-bold text-center">No Such Property Available</h1>
+					<p>Kindly go back and try again</p>
+					<Button asChild>
+						<Link href="/">Go Back</Link>
+					</Button>
+				</div>
+			</div>
+		)
+	}
+
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
 			{allProperties.map(property => (
