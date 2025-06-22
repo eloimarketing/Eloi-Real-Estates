@@ -9,7 +9,7 @@ export default async function ProfilePage() {
 	const userDetails = await prisma.user.findUnique({ where: { id: user?.id } })
 
 	return (
-		<div>
+		<div className="p-4">
 			<h1 className="text-3xl font-semibold text-center">Profile Page</h1>
 			<div>
 				<ProfileEditForm user={userDetails!} />

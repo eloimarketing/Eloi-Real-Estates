@@ -23,7 +23,7 @@ export default async function Navbar() {
 
 	const vendorFields = [
 		{ name: 'Home', href: '/' },
-		{ name: 'Dashboard', href: '/seller/dashboard' },
+		{ name: 'Dashboard', href: '/seller' },
 		{ name: 'Services', href: '/' },
 		{ name: 'Contact Us', href: '/' },
 	]
@@ -45,11 +45,12 @@ export default async function Navbar() {
 						))}
 
 					{/* Show if the user is a vendor */}
-					{vendorFields.map((field, index) => (
-						<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
-							{field.name}
-						</Link>
-					))}
+					{user?.role === 'SELLER' &&
+						vendorFields.map((field, index) => (
+							<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
+								{field.name}
+							</Link>
+						))}
 				</div>
 
 				<div className="flex gap-2">

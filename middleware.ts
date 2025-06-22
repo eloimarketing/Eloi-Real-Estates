@@ -18,7 +18,7 @@ export default auth(async function middleware(request) {
 		'/privacy-policy',
 		'/refund-policy',
 		'/api/cities',
-		'user/property',
+		'/user/property/all',
 		...authRoutes,
 	]
 
@@ -50,5 +50,7 @@ export default auth(async function middleware(request) {
 })
 
 export const config = {
-	matcher: ['/((?!api/auth|auth|assets|_next/static|_next/image|favicon.ico|api/cloudinary/image-upload|^/$).+)'],
+	matcher: [
+		'/((?!api/auth|auth|assets|_next/static|user/property/*|_next/image|favicon.ico|api/cloudinary/image-upload|^/$).+)',
+	],
 }

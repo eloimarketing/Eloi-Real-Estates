@@ -42,7 +42,7 @@ export default function SearchBar() {
 	const [selectedState, setSelectedState] = useState<string>('')
 	const [selectedCity, setSelectedCity] = useState<string>('')
 	const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType | ''>('')
-	const [cities, setCities] = useState<{ id: number; name: string; latitude: string; longitude: string }[]>([])
+	const [cities, setCities] = useState<string[]>([])
 	const [priceRange, setPriceRange] = useState<PriceRange>({ min: '', max: '' })
 	const [searchQuery, setSearchQuery] = useState('')
 	const router = useRouter()
@@ -140,12 +140,12 @@ export default function SearchBar() {
 								<SelectValue placeholder={!selectedState ? 'Select State First' : 'Select City'} />
 							</SelectTrigger>
 							<SelectContent className="rounded-lg max-h-[300px] border-gray-200">
-								{cities.map(city => (
+								{cities.map((city, indx) => (
 									<SelectItem
-										key={city.id}
-										value={city.name}
+										key={indx}
+										value={city}
 										className="rounded-sm hover:bg-gray-50 focus:bg-gray-100 transition-colors duration-200">
-										{city.name}
+										{city}
 									</SelectItem>
 								))}
 								{cities.length === 0 && selectedState && (

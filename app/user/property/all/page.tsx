@@ -12,7 +12,6 @@ export default async function AllProperties({
 }) {
 	// @ts-expect-error // TODO: Fix this
 	const data = JSON.parse((await searchParams).data)
-	console.log(data)
 
 	const whereClause = {
 		isVerified: true,
@@ -21,7 +20,7 @@ export default async function AllProperties({
 			? {
 					location: {
 						...(data.state && { state: data.state }),
-						...(data.city && { city: data.city.toLowerCase() }),
+						...(data.city && { city: data.city }),
 					},
 			  }
 			: {}),
@@ -30,6 +29,7 @@ export default async function AllProperties({
 			OR: [
 				{ title: { contains: data.query, mode: 'insensitive' } },
 				{ description: { contains: data.query, mode: 'insensitive' } },
+				{ location: { address: { contains: data.query, mode: 'insensitive' } } },
 			],
 		}),
 		...(data.priceRange &&
@@ -40,7 +40,7 @@ export default async function AllProperties({
 				},
 			}),
 	}
-	console.log(whereClause, 'whereClause')
+
 	const allProperties = await prisma.property.findMany({
 		where: whereClause,
 		include: {
@@ -50,7 +50,7 @@ export default async function AllProperties({
 			owner: true,
 		},
 	})
-	console.log(allProperties)
+	console.log(allProperties, allProperties.length, 'all properties', whereClause)
 	if (allProperties.length === 0) {
 		return (
 			<div className="h-screen flex items-center justify-center w-full">
