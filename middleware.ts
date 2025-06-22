@@ -18,12 +18,13 @@ export default auth(async function middleware(request) {
 		'/privacy-policy',
 		'/refund-policy',
 		'/api/cities',
+		'user/property',
 		...authRoutes,
 	]
 
 	// Add a new header x-current-path which passes the path to downstream components
 	const headers = new Headers(request.headers)
-	headers.set('x-current-origin', request.nextUrl.origin)
+	headers.set('x-current-origin', request.nextUrl.pathname)
 
 	// Check if the request path is in the allowed list
 	if (allowedPaths.includes(request.nextUrl.pathname)) {
@@ -49,7 +50,5 @@ export default auth(async function middleware(request) {
 })
 
 export const config = {
-	matcher: [
-		'/((?!api/auth|auth|assets|_next/static|seller/property|_next/image|favicon.ico|api/cloudinary/image-upload|^/$).+)',
-	],
+	matcher: ['/((?!api/auth|auth|assets|_next/static|_next/image|favicon.ico|api/cloudinary/image-upload|^/$).+)'],
 }

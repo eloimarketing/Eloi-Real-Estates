@@ -25651,5 +25651,25 @@ export const IndianStates = nationalData.states.filter(state => state.name)
 
 export function getCitiesByState({ stateName }: { stateName: string }) {
 	const citiesData = nationalData.states.find(state => state.name === stateName)?.cities
-	return citiesData
+	return citiesData?.filter(city => city.name).map(city => city.name)
+}
+
+export function getCurrentLocation(): Promise<{ latitude: number; longitude: number }> {
+	return new Promise((resolve, reject) => {
+		if (!navigator.geolocation) {
+			reject('Geolocation is not supported by your browser')
+			return
+		}
+
+		navigator.geolocation.getCurrentPosition(
+			position => {
+				const latitude = position.coords.latitude
+				const longitude = position.coords.longitude
+				resolve({ latitude, longitude })
+			},
+			error => {
+				reject(new Error(`Error getting location: ${error.message}`))
+			}
+		)
+	})
 }

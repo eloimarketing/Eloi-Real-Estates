@@ -6,7 +6,7 @@ import { z } from 'zod'
 
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -14,12 +14,14 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { commonInfoSchema, apartmentFlatSchema } from '@/lib/schema/backend/property'
+import { getCitiesByState, IndianStates, getCurrentLocation } from '@/utils/constant/data'
 
 const FormSchema = commonInfoSchema.merge(apartmentFlatSchema)
 
 export default function ApartmentFlatForm() {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const router = useRouter()
+	const [cities, setCities] = useState<string[]>([''])
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
@@ -29,7 +31,7 @@ export default function ApartmentFlatForm() {
 			price: 0,
 			address: '',
 			city: '',
-			state: '',
+			state: 'Rajasthan',
 			pincode: '',
 			googleMapLat: 0,
 			googleMapLng: 0,
@@ -57,6 +59,17 @@ export default function ApartmentFlatForm() {
 			videos: [],
 		},
 	})
+
+	const watchState = form.watch('state')
+
+	useEffect(() => {
+		if (watchState) {
+			const result = getCitiesByState({ stateName: watchState })
+			setCities(result || [])
+			// Optional: Reset city field on state change
+			form.setValue('city', '')
+		}
+	}, [watchState])
 
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
 		setIsSubmitting(true)
@@ -259,13 +272,24 @@ export default function ApartmentFlatForm() {
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 							<FormField
 								control={form.control}
-								name="city"
+								name="state"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>City</FormLabel>
-										<FormControl>
-											<Input placeholder="Enter city" {...field} />
-										</FormControl>
+										<FormLabel>State</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl className="w-full">
+												<SelectTrigger>
+													<SelectValue placeholder="Enter state" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{IndianStates.map(state => (
+													<SelectItem key={state.id} value={state.name}>
+														{state.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -273,13 +297,24 @@ export default function ApartmentFlatForm() {
 
 							<FormField
 								control={form.control}
-								name="state"
+								name="city"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>State</FormLabel>
-										<FormControl>
-											<Input placeholder="Enter state" {...field} />
-										</FormControl>
+										<FormLabel>City</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl className="w-full">
+												<SelectTrigger>
+													<SelectValue placeholder="Enter city" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{cities.map((city, indx) => (
+													<SelectItem key={indx} value={city}>
+														{city}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -328,6 +363,21 @@ export default function ApartmentFlatForm() {
 									</FormItem>
 								)}
 							/>
+
+							<Button
+								onClick={async () => {
+									try {
+										const { latitude, longitude } = await getCurrentLocation()
+										form.setValue('googleMapLat', parseFloat(latitude.toString()))
+										form.setValue('googleMapLng', parseFloat(longitude.toString()))
+									} catch (error) {
+										form.setError('googleMapLat', { type: 'manual', message: 'Failed to get location' })
+										form.setError('googleMapLng', { type: 'manual', message: 'Failed to get location' })
+										console.log('Failed to get location:', error)
+									}
+								}}>
+								Get Current Location
+							</Button>
 						</div>
 					</div>
 

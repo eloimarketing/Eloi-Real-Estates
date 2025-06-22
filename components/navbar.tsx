@@ -14,9 +14,16 @@ export default async function Navbar() {
 
 	const cart = await prisma.cart.findMany({ where: { userId: user?.id } })
 
-	const fields = [
+	const userFields = [
 		{ name: 'Home', href: '/' },
 		{ name: 'Properties', href: '/user/property/all' },
+		{ name: 'Services', href: '/' },
+		{ name: 'Contact Us', href: '/' },
+	]
+
+	const vendorFields = [
+		{ name: 'Home', href: '/' },
+		{ name: 'Dashboard', href: '/seller/dashboard' },
 		{ name: 'Services', href: '/' },
 		{ name: 'Contact Us', href: '/' },
 	]
@@ -29,7 +36,16 @@ export default async function Navbar() {
 				</Link>
 
 				<div className="mx-auto hidden sm:block">
-					{fields.map((field, index) => (
+					{/* Show if the user is a buyer */}
+					{(user?.role === 'BUYER' || !user?.role) &&
+						userFields.map((field, index) => (
+							<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
+								{field.name}
+							</Link>
+						))}
+
+					{/* Show if the user is a vendor */}
+					{vendorFields.map((field, index) => (
 						<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
 							{field.name}
 						</Link>
