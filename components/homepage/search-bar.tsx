@@ -38,7 +38,7 @@ const propertyTypes: { value: PropertyType; label: string }[] = [
 ]
 
 export default function SearchBar() {
-	const [listingType, setListingType] = useState<'FOR_RENT' | 'FOR_SALE'>('FOR_RENT')
+	const [listingType, setListingType] = useState<'FOR_RENT' | 'FOR_SALE'>('FOR_SALE')
 	const [selectedState, setSelectedState] = useState<string>('')
 	const [selectedCity, setSelectedCity] = useState<string>('')
 	const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType | ''>('')

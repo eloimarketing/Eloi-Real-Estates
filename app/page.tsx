@@ -71,84 +71,6 @@ export default async function Home() {
 						</div>
 					))}
 
-					{/* Properties Sections */}
-					{/* <div className="px-10 sm:px-6 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Featured Properties</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{allProperties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
-
-					<div className="px-10 sm:px-6 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Kolkata</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{allProperties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
-
-					<div className="px-10 sm:px-6 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Bangalore</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{allProperties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
-
-					<div className="px-10 sm:px-6 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Delhi</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{allProperties.map((property, indx) => (
-									<Link key={indx} href={`/seller/property/${property.id}`}>
-										<CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-											<PropertyCard key={indx} property={property} />
-										</CarouselItem>
-									</Link>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div>
-
-					<div className="px-10 sm:px-6 my-6 sm:my-10">
-						<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in Jaipur</h1>
-						<Carousel className="">
-							<CarouselContent>
-								{allProperties.map((property, indx) => (
-									<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-										<PropertyCard key={indx} property={property} />
-									</CarouselItem>
-								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					</div> */}
-
 					{/* Feature Icons */}
 					<div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 w-full py-6 sm:py-10">
 						{/* Avoid Brokers */}
@@ -190,7 +112,7 @@ export default async function Home() {
 				</MaxWidthWrapper>
 
 				{/* Property Types Navigation */}
-				<div className="w-full bg-muted flex border-y gap-2 sm:gap-4 lg:gap-8 my-6 overflow-x-auto scrollbar-hide">
+				<div className="w-full bg-muted flex border-y gap-2 sm:gap-4 lg:gap-8 overflow-x-auto scrollbar-hide">
 					{Object.keys(PropertyType).map((property, indx) => (
 						<div
 							key={indx}
@@ -200,7 +122,7 @@ export default async function Home() {
 					))}
 				</div>
 
-				<div className="w-full text-center text-sm py-2 border z-50">
+				<div className="w-full text-center text-sm py-2 z-50">
 					By using this site, you agree to our{' '}
 					<Link href="/terms" className="underline text-blue-600">
 						Terms and Conditions
