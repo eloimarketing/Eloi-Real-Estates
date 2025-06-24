@@ -55,7 +55,7 @@ export default async function Home() {
 
 				<MaxWidthWrapper className="flex flex-col">
 					{Object.keys(propertiesByCity).map((city, index) => (
-						<div className="px-10 sm:px-6 my-6 sm:my-10" key={index}>
+						<div className="my-6 sm:my-10" key={index}>
 							<h1 className="text-xl sm:text-2xl font-bold mb-4">Properties in {city}</h1>
 							<Carousel className="">
 								<CarouselContent>
@@ -65,8 +65,8 @@ export default async function Home() {
 										</CarouselItem>
 									))}
 								</CarouselContent>
-								<CarouselPrevious />
-								<CarouselNext />
+								<CarouselPrevious className="ml-14 sm:ml-2" />
+								<CarouselNext className="mr-14 sm:mr-2" />
 							</Carousel>
 						</div>
 					))}

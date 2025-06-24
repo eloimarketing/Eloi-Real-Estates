@@ -4,10 +4,11 @@ import { buttonVariants } from './ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { Property } from '@prisma/client'
+import Link from 'next/link'
 
 export default function PropertyCard({ property }: { property: Property }) {
 	return (
-		<div className="rounded-md overflow-hidden border shadow-sm">
+		<Link href={`/user/property/${property.id}`} className="rounded-md overflow-hidden border shadow-sm">
 			<div className="h-58 overflow-hidden">
 				<Image
 					src={property.images[0]}
@@ -45,6 +46,6 @@ export default function PropertyCard({ property }: { property: Property }) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Link>
 	)
 }
