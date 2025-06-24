@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation'
 import { User } from 'next-auth'
 import {
 	AlignJustify,
-	HeartIcon,
 	ShoppingCart,
 	Home,
 	Building2,
