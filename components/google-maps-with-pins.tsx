@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 type Property = {
 	lat: number
@@ -9,38 +9,74 @@ type Property = {
 }
 
 const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
-	console.log(properties)
+	const mapRef = useRef<HTMLDivElement>(null)
+	const mapInstanceRef = useRef<google.maps.Map | null>(null)
+	const markersRef = useRef<google.maps.Marker[]>([])
+
 	useEffect(() => {
-		const script = document.createElement('script')
-		script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQReifXIyF27pAqVclaTJDkboN1NCwZvI&callback=initMap'
-		script.async = true
-		script.defer = true
-		document.body.appendChild(script)
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		;(window as any).initMap = function () {
+		// Clear existing markers
+		markersRef.current.forEach(marker => marker.setMap(null))
+		markersRef.current = []
+
+		const initMap = () => {
+			if (!mapRef.current) return
+
 			const center = { lat: 23.2599, lng: 77.4126 }
 
-			const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
-				zoom: 5,
-				center,
-			})
+			// Create map if it doesn't exist
+			if (!mapInstanceRef.current) {
+				mapInstanceRef.current = new google.maps.Map(mapRef.current, {
+					zoom: 5,
+					center,
+				})
+			}
 
+			// Add markers for each property
 			properties.forEach(property => {
-				new google.maps.Marker({
+				const marker = new google.maps.Marker({
 					position: { lat: property.lat, lng: property.lng },
-					map,
+					map: mapInstanceRef.current,
 					title: property.title,
 				})
+				markersRef.current.push(marker)
 			})
+
+			// Auto-fit bounds if there are properties
+			if (properties.length > 0) {
+				const bounds = new google.maps.LatLngBounds()
+				properties.forEach(property => {
+					bounds.extend({ lat: property.lat, lng: property.lng })
+				})
+				mapInstanceRef.current?.fitBounds(bounds)
+			}
 		}
 
-		return () => {
+		// Check if Google Maps API is already loaded
+		if (typeof google !== 'undefined' && google.maps) {
+			initMap()
+		} else {
+			// Load Google Maps API
+			const script = document.createElement('script')
+			script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQReifXIyF27pAqVclaTJDkboN1NCwZvI&callback=initGoogleMap'
+			script.async = true
+			script.defer = true
+
+			// Use a unique callback name to avoid conflicts
+
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			delete (window as any).initMap
+			;(window as any).initGoogleMap = initMap
+
+			document.body.appendChild(script)
+		}
+
+		// Cleanup function
+		return () => {
+			markersRef.current.forEach(marker => marker.setMap(null))
+			markersRef.current = []
 		}
 	}, [properties])
 
-	return <div id="map" style={{ height: '500px', width: '100%' }} />
+	return <div ref={mapRef} style={{ height: '500px', width: '100%' }} />
 }
 
 export default GoogleMapWithPins

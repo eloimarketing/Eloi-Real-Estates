@@ -32,13 +32,10 @@ export default async function Home() {
 				<MaxWidthWrapper className="py-4">
 					<SearchBar />
 				</MaxWidthWrapper>
-				<div className="flex">
-					{propertyList.length > 0 && (
-						<MaxWidthWrapper className="px-4 sm:px-6 md:px-0">
-							<GoogleMapWithPins properties={propertyList} />
-						</MaxWidthWrapper>
-					)}
-				</div>
+
+				<MaxWidthWrapper className="px-4 sm:px-6 md:px-0 flex">
+					{propertyList.length > 0 && <GoogleMapWithPins properties={propertyList} />}
+				</MaxWidthWrapper>
 
 				{/* CTA Banner */}
 				<div className="text-white text-xs sm:text-sm text-center my-6 sm:my-10 bg-[#384d6c] w-full p-3 sm:p-4 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
