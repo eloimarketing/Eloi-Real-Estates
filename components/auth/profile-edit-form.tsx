@@ -126,7 +126,7 @@ export function ProfileEditForm({ user }: { user: UserData }) {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-4xl mx-auto mt-10">
 				<div className="flex justify-center mb-6">
 					<div className="relative">
 						<Avatar className="h-24 w-24">

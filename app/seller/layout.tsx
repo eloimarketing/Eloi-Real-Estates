@@ -6,7 +6,7 @@ export default async function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<div className="h-[100dvh] flex pt-20 absolute top-0">
+		<div className="h-[100dvh] flex pt-20 absolute top-0 w-full">
 			<SubLayout />
 			<div className="overflow-y-scroll w-full">{children}</div>
 		</div>

@@ -34,7 +34,7 @@ export default function PropertyCard({ property }: { property: Property }) {
 						</Tooltip>
 					</div>
 					<div className="mt-4 flex justify-between items-center gap-2">
-						<div className="font-bold text-sm flex justify-center items-center flex-col">
+						<div className="font-bold text-sm flex justify-start items-start flex-col">
 							₹ {property.price}
 							<span className="font-medium"> Rent / Month</span>
 						</div>

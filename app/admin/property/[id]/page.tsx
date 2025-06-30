@@ -63,7 +63,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ id: s
 					<div className="bg-white rounded-2xl shadow p-6 space-y-4 border border-gray-200">
 						<h2 className="text-2xl font-semibold text-indigo-600">Apartment Details</h2>
 						<div className="text-gray-700 space-y-2">
-							<Info label="BHK" value={apartment.bhk} />
+							<Info label="BHK" value={apartment.bhk.toString()} />
 							<Info label="Carpet Area" value={`${apartment.carpetArea} sqft`} />
 							<Info label="Built-Up Area" value={`${apartment.builtUpArea} sqft`} />
 							<Info label="Floor" value={`${apartment.floorNumber} / ${apartment.totalFloors}`} />

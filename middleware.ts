@@ -19,16 +19,14 @@ export default auth(async function middleware(request) {
 		'/refund-policy',
 		'/api/cities',
 		'/user/property/all',
+		'/terms-and-conditions',
+		'/business-policy',
 		...authRoutes,
 	]
 
-	// Add a new header x-current-path which passes the path to downstream components
-	const headers = new Headers(request.headers)
-	headers.set('x-current-origin', request.nextUrl.pathname)
-
 	// Check if the request path is in the allowed list
 	if (allowedPaths.includes(request.nextUrl.pathname)) {
-		return NextResponse.next({ headers })
+		return NextResponse.next()
 	}
 
 	// Redirect to login if not authenticated and not on the login page
@@ -38,15 +36,15 @@ export default auth(async function middleware(request) {
 		if (urls[1] === 'seller') {
 			const newUrl = new URL('/auth/login', request.nextUrl.origin)
 			// return Response.redirect(newUrl, { headers })
-			return NextResponse.redirect(newUrl, { headers })
+			return NextResponse.redirect(newUrl)
 		}
 
 		const newUrl = new URL('/api', request.nextUrl.origin)
 		// return Response.redirect(newUrl)
-		return NextResponse.redirect(newUrl, { headers })
+		return NextResponse.redirect(newUrl)
 	}
 
-	return NextResponse.next({ headers })
+	return NextResponse.next()
 })
 
 export const config = {

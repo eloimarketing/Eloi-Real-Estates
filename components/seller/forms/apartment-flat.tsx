@@ -39,7 +39,6 @@ export default function ApartmentFlatForm() {
 			propertyRent: 0,
 			securityDeposit: 0,
 			advanceBookingAmount: 0,
-			bhk: '',
 			carpetArea: 0,
 			builtUpArea: 0,
 			floorNumber: 0,
@@ -103,9 +102,12 @@ export default function ApartmentFlatForm() {
 			})
 
 			const result = await response.json()
-			console.log('Property created:', result)
+			if (!response.ok) {
+				throw new Error(result.message || 'Failed to create property')
+			}
 
 			toast.success('Property created successfully!')
+
 			setTimeout(() => {
 				router.push(`/seller/property/${result.createdData.id}`)
 			}, 1500)
@@ -393,7 +395,12 @@ export default function ApartmentFlatForm() {
 									<FormItem>
 										<FormLabel>BHK</FormLabel>
 										<FormControl>
-											<Input placeholder="e.g., 2BHK, 3BHK" {...field} />
+											<Input
+												type="number"
+												placeholder="e.g., 2, 3"
+												{...field}
+												onChange={e => field.onChange(parseInt(e.target.value) || 0)}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>

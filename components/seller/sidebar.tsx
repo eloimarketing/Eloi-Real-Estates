@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation'
 
 export default function SellerSidebar() {
 	const pathname = usePathname()
-	console.log(pathname, 'from pathname')
 
 	const links = [
 		{ name: 'Dashboard', path: '/seller' },
@@ -19,7 +18,6 @@ export default function SellerSidebar() {
 
 	return (
 		<div>
-			{/* All the links here */}
 			<div className="flex flex-col gap-2">
 				{links.map((link, indx) => (
 					<Link

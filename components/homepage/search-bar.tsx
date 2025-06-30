@@ -78,7 +78,6 @@ export default function SearchBar() {
 
 	return (
 		<div className="flex justify-center items-center flex-col w-full max-w-6xl mx-auto">
-			{/* Tab Headers */}
 			<div className="w-full max-w-xs sm:max-w-sm border-t border-x rounded-t-lg flex items-center h-12 bg-white">
 				<div
 					className="flex flex-col items-center justify-between w-full font-semibold hover:cursor-pointer h-full transition-colors duration-200"

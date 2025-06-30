@@ -203,7 +203,7 @@ model Inquiry {
 model ApartmentFlat {
   id               String           @id @default(cuid())
   propertyId       String           @unique @default(cuid())
-  bhk              String // e.g., "2 BHK", "3 BHK"
+  bhk              Int
   carpetArea       Float
   builtUpArea      Float
   floorNumber      Int

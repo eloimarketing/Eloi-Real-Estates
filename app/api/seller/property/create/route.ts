@@ -54,16 +54,16 @@ export async function POST(request: Request) {
 		// For creating Apartment_Flat
 		if (propertyType === 'Apartment_Flat') {
 			const apartmentFlatRawData = {
-				bhk: formData.get('bhk') as string,
-				carpetArea: Number(formData.get('carpetArea')),
-				builtUpArea: Number(formData.get('builtUpArea')),
-				floorNumber: Number(formData.get('floorNumber')),
-				totalFloors: Number(formData.get('totalFloors')),
-				bathrooms: Number(formData.get('bathrooms')),
+				bhk: parseInt((formData.get('bhk') as string) || '0'), // Ensure bhk is a number
+				carpetArea: parseInt((formData.get('carpetArea') as string) || '0'),
+				builtUpArea: parseInt((formData.get('builtUpArea') as string) || '0'),
+				floorNumber: parseInt((formData.get('floorNumber') as string) || '0'),
+				totalFloors: parseInt((formData.get('totalFloors') as string) || '0'),
+				bathrooms: parseInt((formData.get('bathrooms') as string) || '0'),
 				furnishingStatus: formData.get('furnishingStatus') as 'UNFURNISHED' | 'SEMI_FURNISHED' | 'FULLY_FURNISHED',
 				balcony: formData.get('balcony') === 'true',
 				parking: formData.get('parking') === 'true',
-				ageOfProperty: Number(formData.get('ageOfProperty')),
+				ageOfProperty: parseInt((formData.get('ageOfProperty') as string) || '0'),
 				facingDirection: formData.get('facingDirection') as string,
 				hasLift: formData.get('hasLift') === 'true',
 				hasSecurity: formData.get('hasSecurity') === 'true',
@@ -79,9 +79,9 @@ export async function POST(request: Request) {
 			// For creating Independent_House_Villa
 		} else if (propertyType === 'Independent_House_Villa') {
 			const independentHouseVillaRawData = {
-				bedrooms: Number(formData.get('bedrooms')),
-				plotArea: Number(formData.get('plotArea')),
-				builtUpArea: Number(formData.get('builtUpArea')),
+				bedrooms: parseInt((formData.get('bedrooms') as string) || '0'),
+				plotArea: parseInt((formData.get('plotArea') as string) || '0'),
+				builtUpArea: parseInt((formData.get('builtUpArea') as string) || '0'),
 				floors: Number(formData.get('floors')),
 				parking: formData.get('parking') === 'true',
 				ageOfConstruction: Number(formData.get('ageOfConstruction')),

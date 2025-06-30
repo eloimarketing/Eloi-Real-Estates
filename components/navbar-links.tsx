@@ -22,27 +22,33 @@ import { useState } from 'react'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from './ui/sheet'
 import { Separator } from './ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import Image from 'next/image'
+import MaxWidthWrapper from './max-width-wrapper'
 
 export default function NavbarLinks({ user, cart }: { user: User | undefined; cart: Cart[] }) {
 	const pathname = usePathname()
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
 	const userFields = [
-		{ name: 'Home', href: '/', icon: Home },
-		{ name: 'Properties', href: '/user/property/all', icon: Building2 },
-		{ name: 'Contact Us', href: '/', icon: Phone },
+		{ name: 'Home', href: '/', icon: Home, visible: true },
+		{ name: 'Properties', href: '/user/property/all', icon: Building2, visible: true },
+		{ name: 'Contact Us', href: '/contact', icon: Phone, visible: true },
+		{ name: 'About Us', href: '/terms-and-conditions', icon: Settings, visible: true },
 	]
 
 	const vendorFields = [
-		{ name: 'Home', href: '/', icon: Home },
-		{ name: 'Dashboard', href: '/seller', icon: LayoutDashboard },
-		{ name: 'Contact Us', href: '/', icon: Phone },
+		{ name: 'Home', href: '/', icon: Home, visible: true },
+		{ name: 'Dashboard', href: '/seller', icon: LayoutDashboard, visible: true },
+		{ name: 'Add Property', href: '/seller/property/create', icon: Building2, visible: true },
+		{ name: 'Contact Us', href: '/contact', icon: Phone, visible: false },
+		{ name: 'Profile', href: '/seller/profile', icon: UserIcon, visible: false },
+		{ name: 'About Us', href: '/terms-and-conditions', icon: Settings, visible: true },
 	]
 
 	const adminFields = [
-		{ name: 'Home', href: '/', icon: Home },
-		{ name: 'All Properties', href: '/admin/all-property', icon: Building2 },
-		{ name: 'Settings', href: '/admin/settings', icon: Settings },
+		{ name: 'Home', href: '/', icon: Home, visible: true },
+		{ name: 'All Properties', href: '/admin/all-property', icon: Building2, visible: true },
+		{ name: 'Settings', href: '/admin/settings', icon: Settings, visible: true },
 	]
 
 	const getFieldsForUser = () => {
@@ -50,6 +56,11 @@ export default function NavbarLinks({ user, cart }: { user: User | undefined; ca
 		if (user?.role === 'SELLER') return vendorFields
 		if (user?.role === 'ADMIN') return adminFields
 		return userFields
+	}
+
+	const getVisibleFieldsForDesktop = () => {
+		const fields = getFieldsForUser()
+		return fields.filter(field => field.visible)
 	}
 
 	const getUserDisplayName = () => {
@@ -70,11 +81,15 @@ export default function NavbarLinks({ user, cart }: { user: User | undefined; ca
 	const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
 	return (
-		<>
+		<MaxWidthWrapper className="flex justify-between items-center overflow-hidden">
+			<Link href={'/'} className="flex items-center gap-2">
+				<Image src={'/assets/logo.jpeg'} alt="logo" width={1536} height={1024} className="w-28" />
+			</Link>
+
 			<div className="mx-auto hidden sm:block">
-				{/* Desktop navigation - keeping your existing logic */}
+				{/* Desktop navigation - only show visible fields */}
 				{user?.role === 'BUYER' &&
-					userFields.map((field, index) => (
+					getVisibleFieldsForDesktop().map((field, index) => (
 						<Link
 							key={index}
 							href={field.href}
@@ -84,204 +99,227 @@ export default function NavbarLinks({ user, cart }: { user: User | undefined; ca
 					))}
 
 				{user?.role === 'SELLER' &&
-					vendorFields.map((field, index) => (
-						<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
+					getVisibleFieldsForDesktop().map((field, index) => (
+						<Link
+							key={index}
+							href={field.href}
+							className={cn(buttonVariants({ variant: 'ghost' }), pathname === field.href && 'underline underline-offset-4')}>
 							{field.name}
 						</Link>
 					))}
 
 				{user?.role === 'ADMIN' &&
-					adminFields.map((field, index) => (
-						<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
+					getVisibleFieldsForDesktop().map((field, index) => (
+						<Link
+							key={index}
+							href={field.href}
+							className={cn(buttonVariants({ variant: 'ghost' }), pathname === field.href && 'underline underline-offset-4')}>
 							{field.name}
 						</Link>
 					))}
 
 				{!user &&
-					userFields.map((field, index) => (
-						<Link key={index} href={field.href} className={buttonVariants({ variant: 'ghost' })}>
+					getVisibleFieldsForDesktop().map((field, index) => (
+						<Link
+							key={index}
+							href={field.href}
+							className={cn(buttonVariants({ variant: 'ghost' }), pathname === field.href && 'underline underline-offset-4')}>
 							{field.name}
 						</Link>
 					))}
 			</div>
 
-			<div className="ml-auto">
-				<Link href={'/user/cart'} className={cn('mr-2 sm:hidden', buttonVariants({ variant: 'outline', size: 'icon' }))}>
-					<ShoppingCart />
-				</Link>
-
-				{/* Enhanced Mobile menu */}
-				<Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-					<SheetTrigger asChild className="ml-auto mr-2">
-						<Button
-							variant={'outline'}
-							size={'icon'}
-							className="sm:hidden hover:bg-gray-100 transition-colors"
-							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-							<AlignJustify className="h-5 w-5" />
-						</Button>
-					</SheetTrigger>
-					<SheetContent side="right" className="w-80 p-0 flex flex-col">
-						{/* Header Section */}
-						<SheetHeader className="p-6 pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
-							<div className="flex items-center justify-between">
-								<SheetTitle className="text-xl font-semibold text-gray-900">Menu</SheetTitle>
-								{/* <Button variant="ghost" size="icon" onClick={closeMobileMenu} className="h-6 w-6 rounded-full hover:bg-white/50">
-								<X className="h-4 w-4" />
-							</Button> */}
-							</div>
-
-							{/* User Profile Section */}
-							<div className="flex items-center gap-3 mt-4">
-								<Avatar className="h-12 w-12 border-2 border-white shadow-sm">
-									<AvatarImage src={user?.image || ''} alt={getUserDisplayName()} />
-									<AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
-										{getUserInitials()}
-									</AvatarFallback>
-								</Avatar>
-								<div className="flex-1 min-w-0">
-									<p className="font-semibold text-gray-900 truncate">{getUserDisplayName()}</p>
-									<p className="text-sm text-gray-600 capitalize">{user?.role?.toLowerCase() || 'Guest'}</p>
-								</div>
-							</div>
-						</SheetHeader>
-
-						{/* Navigation Links */}
-						<div className="flex-1 px-6 py-4 space-y-2">
-							<div className="space-y-1">
-								{getFieldsForUser().map((field, index) => {
-									const Icon = field.icon
-									const isActive = pathname === field.href
-
-									return (
-										<Link
-											key={index}
-											href={field.href}
-											onClick={closeMobileMenu}
-											className={cn(
-												'flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 group',
-												isActive
-													? 'bg-blue-50 text-blue-700 border border-blue-200'
-													: 'hover:bg-gray-50 text-gray-700 hover:text-gray-900'
-											)}>
-											<Icon
-												className={cn(
-													'h-5 w-5 transition-colors',
-													isActive ? 'text-blue-600' : 'text-gray-500 group-hover:text-gray-700'
-												)}
-											/>
-											<span className="font-medium flex-1">{field.name}</span>
-											<ChevronRight
-												className={cn(
-													'h-4 w-4 transition-all duration-200',
-													isActive
-														? 'text-blue-500 transform translate-x-1'
-														: 'text-gray-400 group-hover:text-gray-600 group-hover:transform group-hover:translate-x-1'
-												)}
-											/>
-										</Link>
-									)
-								})}
-							</div>
-
-							<Separator className="my-4" />
-
-							{/* Role-specific Actions */}
-							<div className="space-y-2">
-								{(!user || user.role === 'SELLER') && (
-									<Link
-										href={'/seller/property/create-2'}
-										onClick={closeMobileMenu}
-										className="flex items-center gap-3 px-3 py-3 rounded-lg bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-colors">
-										<Building2 className="h-5 w-5 text-green-600" />
-										<span className="font-medium">List Your Property</span>
-									</Link>
-								)}
-
-								{user?.role === 'ADMIN' && (
-									<Link
-										href={'/admin/all-property'}
-										onClick={closeMobileMenu}
-										className="flex items-center gap-3 px-3 py-3 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition-colors">
-										<Settings className="h-5 w-5 text-purple-600" />
-										<span className="font-medium">Manage Properties</span>
-									</Link>
-								)}
-
-								{user?.role === 'BUYER' && (
-									<Link
-										href={'/user/cart'}
-										onClick={closeMobileMenu}
-										className="flex items-center gap-3 px-3 py-3 rounded-lg bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 transition-colors relative">
-										<ShoppingCart className="h-5 w-5 text-orange-600" />
-										<span className="font-medium flex-1">Shopping Cart</span>
-										{cart.length > 0 && (
-											<div className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] h-5 flex items-center justify-center">
-												{cart.length}
-											</div>
-										)}
-									</Link>
-								)}
-							</div>
-						</div>
-
-						{/* Footer Section */}
-						<div className="p-6 pt-4 border-t bg-gray-50">
-							{!user ? (
-								<Link
-									href={'/auth/login'}
-									onClick={closeMobileMenu}
-									className={cn(buttonVariants({ variant: 'default' }), 'w-full justify-center gap-2')}>
-									<UserIcon className="h-4 w-4" />
-									Log In
-								</Link>
-							) : (
-								<div onClick={closeMobileMenu}>
-									<SignOutBtn />
+			<div className="flex items-center gap-2">
+				{/* Mobile menu and cart - Always show on mobile */}
+				<div className="flex items-center gap-2 sm:hidden">
+					{/* Cart for buyers */}
+					{user?.role === 'BUYER' && (
+						<Link href={'/user/cart'} className={cn('relative', buttonVariants({ variant: 'outline', size: 'icon' }))}>
+							<ShoppingCart />
+							{cart.length > 0 && (
+								<div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[18px] h-[18px] flex items-center justify-center">
+									{cart.length}
 								</div>
 							)}
-						</div>
-					</SheetContent>
-				</Sheet>
-			</div>
+						</Link>
+					)}
 
-			{/* Desktop action buttons */}
-			<div className="flex gap-2">
-				{(!user || user.role === 'SELLER') && (
-					<Link href={'/seller/property/create-2'} className={cn(buttonVariants({ variant: 'default' }), 'hidden sm:block')}>
-						List Your Property
-					</Link>
-				)}
+					{/* Quick action for sellers */}
+					{user?.role === 'SELLER' && (
+						<Link href={'/seller/property/create-2'} className={cn(buttonVariants({ variant: 'outline', size: 'icon' }))}>
+							<Building2 className="h-4 w-4" />
+						</Link>
+					)}
 
-				{user?.role === 'ADMIN' && (
-					<Link href={'/admin/all-property'} className={buttonVariants({ variant: 'default' })}>
-						Manage Properties
-					</Link>
-				)}
+					{/* Mobile hamburger menu - Always present */}
 
-				{user?.role === 'BUYER' && (
-					<>
-						<div className="relative hidden sm:block">
+					<Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+						<SheetTrigger asChild>
+							<Button
+								// onClick={e => setIsMobileMenuOpen(e)}
+								variant={'outline'}
+								size={'icon'}
+								className="hover:bg-gray-100 transition-colors">
+								<AlignJustify className="h-5 w-5" />
+							</Button>
+						</SheetTrigger>
+						<SheetContent side="right" className="w-80 p-0 flex flex-col">
+							{/* Header Section */}
+							<SheetHeader className="p-6 pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+								<div className="flex items-center justify-between">
+									<SheetTitle className="text-xl font-semibold text-gray-900">Menu</SheetTitle>
+								</div>
+
+								{/* User Profile Section */}
+								<div className="flex items-center gap-3 mt-4">
+									<Avatar className="h-12 w-12 border-2 border-white shadow-sm">
+										<AvatarImage src={user?.image || ''} alt={getUserDisplayName()} />
+										<AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
+											{getUserInitials()}
+										</AvatarFallback>
+									</Avatar>
+									<div className="flex-1 min-w-0">
+										<p className="font-semibold text-gray-900 truncate">{getUserDisplayName()}</p>
+										<p className="text-sm text-gray-600 capitalize">{user?.role?.toLowerCase() || 'Guest'}</p>
+									</div>
+								</div>
+							</SheetHeader>
+
+							{/* Navigation Links - show all fields in mobile sidebar */}
+							<div className="flex-1 px-6 py-4 space-y-2">
+								<div className="space-y-1">
+									{getFieldsForUser().map((field, index) => {
+										const Icon = field.icon
+										const isActive = pathname === field.href
+
+										return (
+											<Link
+												key={index}
+												href={field.href}
+												onClick={closeMobileMenu}
+												className={cn(
+													'flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 group',
+													isActive
+														? 'bg-blue-50 text-blue-700 border border-blue-200'
+														: 'hover:bg-gray-50 text-gray-700 hover:text-gray-900'
+												)}>
+												<Icon
+													className={cn(
+														'h-5 w-5 transition-colors',
+														isActive ? 'text-blue-600' : 'text-gray-500 group-hover:text-gray-700'
+													)}
+												/>
+												<span className="font-medium flex-1">{field.name}</span>
+												<ChevronRight
+													className={cn(
+														'h-4 w-4 transition-all duration-200',
+														isActive
+															? 'text-blue-500 transform translate-x-1'
+															: 'text-gray-400 group-hover:text-gray-600 group-hover:transform group-hover:translate-x-1'
+													)}
+												/>
+											</Link>
+										)
+									})}
+								</div>
+
+								<Separator className="my-4" />
+
+								{/* Role-specific Actions */}
+								<div className="space-y-2">
+									{(!user || user.role === 'SELLER') && (
+										<Link
+											href={'/seller/property/create'}
+											onClick={closeMobileMenu}
+											className="flex items-center gap-3 px-3 py-3 rounded-lg bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-colors">
+											<Building2 className="h-5 w-5 text-green-600" />
+											<span className="font-medium">List Your Property</span>
+										</Link>
+									)}
+
+									{user?.role === 'ADMIN' && (
+										<Link
+											href={'/admin/all-property'}
+											onClick={closeMobileMenu}
+											className="flex items-center gap-3 px-3 py-3 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition-colors">
+											<Settings className="h-5 w-5 text-purple-600" />
+											<span className="font-medium">Manage Properties</span>
+										</Link>
+									)}
+
+									{user?.role === 'BUYER' && (
+										<Link
+											href={'/user/cart'}
+											onClick={closeMobileMenu}
+											className="flex items-center gap-3 px-3 py-3 rounded-lg bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 transition-colors relative">
+											<ShoppingCart className="h-5 w-5 text-orange-600" />
+											<span className="font-medium flex-1">Shopping Cart</span>
+											{cart.length > 0 && (
+												<div className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] h-5 flex items-center justify-center">
+													{cart.length}
+												</div>
+											)}
+										</Link>
+									)}
+								</div>
+							</div>
+
+							{/* Footer Section */}
+							<div className="p-6 pt-4 border-t bg-gray-50">
+								{!user ? (
+									<Link
+										href={'/auth/login'}
+										onClick={closeMobileMenu}
+										className={cn(buttonVariants({ variant: 'default' }), 'w-full justify-center gap-2')}>
+										<UserIcon className="h-4 w-4" />
+										Log In
+									</Link>
+								) : (
+									<div onClick={closeMobileMenu}>
+										<SignOutBtn />
+									</div>
+								)}
+							</div>
+						</SheetContent>
+					</Sheet>
+				</div>
+
+				{/* Desktop action buttons */}
+				<div className="hidden sm:flex items-center gap-2">
+					{(!user || user.role === 'SELLER') && (
+						<Link href={'/seller/property/create'} className={buttonVariants({ variant: 'default' })}>
+							List Your Property
+						</Link>
+					)}
+
+					{user?.role === 'ADMIN' && (
+						<Link href={'/admin/all-property'} className={buttonVariants({ variant: 'default' })}>
+							Manage Properties
+						</Link>
+					)}
+
+					{user?.role === 'BUYER' && (
+						<div className="relative">
 							<Link href={'/user/cart'} className={buttonVariants({ variant: 'outline', size: 'icon' })}>
 								<ShoppingCart />
 							</Link>
 							{cart.length > 0 && (
-								<div className="absolute -top-3 -right-2 bg-red-500 text-white border border-white aspect-square w-6 h-6 flex justify-center items-center rounded-full text-xs font-bold">
+								<div className="absolute -top-2 -right-2 bg-red-500 text-white border border-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[18px] h-[18px] flex items-center justify-center">
 									{cart.length}
 								</div>
 							)}
 						</div>
-					</>
-				)}
+					)}
 
-				{!user ? (
-					<Link href={'/auth/login'} className={buttonVariants({ variant: 'outline' })}>
-						Log In
-					</Link>
-				) : (
-					<SignOutBtn />
-				)}
+					{!user ? (
+						<Link href={'/auth/login'} className={buttonVariants({ variant: 'outline' })}>
+							Log In
+						</Link>
+					) : (
+						<SignOutBtn />
+					)}
+				</div>
 			</div>
-		</>
+		</MaxWidthWrapper>
 	)
 }

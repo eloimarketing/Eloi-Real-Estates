@@ -8,18 +8,63 @@ type Property = {
 	title: string
 }
 
+// Global flag to track API loading state
+let isGoogleMapsApiLoaded = false
+let isGoogleMapsApiLoading = false
+const loadingCallbacks: (() => void)[] = []
+
+const loadGoogleMapsApi = (callback: () => void) => {
+	// If already loaded, execute callback immediately
+	if (isGoogleMapsApiLoaded) {
+		callback()
+		return
+	}
+
+	// Add callback to queue
+	loadingCallbacks.push(callback)
+
+	// If already loading, don't create another script
+	if (isGoogleMapsApiLoading) {
+		return
+	}
+
+	isGoogleMapsApiLoading = true
+
+	// Create script tag only once
+	const script = document.createElement('script')
+	script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQReifXIyF27pAqVclaTJDkboN1NCwZvI'
+	script.async = true
+	script.defer = true
+
+	script.onload = () => {
+		isGoogleMapsApiLoaded = true
+		isGoogleMapsApiLoading = false
+
+		// Execute all queued callbacks
+		loadingCallbacks.forEach(cb => cb())
+		loadingCallbacks.length = 0 // Clear the array
+	}
+
+	script.onerror = () => {
+		isGoogleMapsApiLoading = false
+		console.error('Failed to load Google Maps API')
+	}
+
+	document.head.appendChild(script)
+}
+
 const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 	const mapRef = useRef<HTMLDivElement>(null)
 	const mapInstanceRef = useRef<google.maps.Map | null>(null)
 	const markersRef = useRef<google.maps.Marker[]>([])
 
 	useEffect(() => {
-		// Clear existing markers
-		markersRef.current.forEach(marker => marker.setMap(null))
-		markersRef.current = []
-
 		const initMap = () => {
 			if (!mapRef.current) return
+
+			// Clear existing markers
+			markersRef.current.forEach(marker => marker.setMap(null))
+			markersRef.current = []
 
 			const center = { lat: 23.2599, lng: 77.4126 }
 
@@ -55,18 +100,8 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		if (typeof google !== 'undefined' && google.maps) {
 			initMap()
 		} else {
-			// Load Google Maps API
-			const script = document.createElement('script')
-			script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQReifXIyF27pAqVclaTJDkboN1NCwZvI&callback=initGoogleMap'
-			script.async = true
-			script.defer = true
-
-			// Use a unique callback name to avoid conflicts
-
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			;(window as any).initGoogleMap = initMap
-
-			document.body.appendChild(script)
+			// Load Google Maps API with proper handling
+			loadGoogleMapsApi(initMap)
 		}
 
 		// Cleanup function

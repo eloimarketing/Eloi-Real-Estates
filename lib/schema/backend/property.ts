@@ -20,7 +20,7 @@ export const commonInfoSchema = z.object({
 })
 
 export const apartmentFlatSchema = z.object({
-	bhk: z.string().min(1),
+	bhk: z.number().min(1),
 	carpetArea: z.number().min(1),
 	builtUpArea: z.number().min(1),
 	floorNumber: z.number().min(1),

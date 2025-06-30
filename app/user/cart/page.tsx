@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import RemoveFromCart from '@/components/remove-from-cart'
 
 export default async function Cart() {
 	const sesion = await auth()
@@ -31,9 +32,12 @@ export default async function Cart() {
 							<p className="text-gray-500 leading-5 my-1">{property.description}</p>
 							<p className="text-gray-800 font-bold">₹{property.price.toLocaleString()}</p>
 
-							<Link href={`/user/property/${property.id}`} className={cn(buttonVariants({ variant: 'default' }), 'mt-2')}>
-								View Property
-							</Link>
+							<div className="flex gap-2 items-end">
+								<Link href={`/user/property/${property.id}`} className={cn(buttonVariants({ variant: 'default' }), 'mt-2')}>
+									View Property
+								</Link>
+								<RemoveFromCart propertyId={property.id} />
+							</div>
 						</div>
 					</div>
 				))}
