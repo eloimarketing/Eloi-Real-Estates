@@ -9,7 +9,7 @@ export default function SellerSidebar() {
 
 	const links = [
 		{ name: 'Dashboard', path: '/seller' },
-		{ name: 'Add Property', path: '/seller/property/create-2' },
+		{ name: 'Add Property', path: '/seller/property/create' },
 		{ name: 'All Properties', path: '/seller/property' },
 		{ name: 'Orders', path: '' },
 		{ name: 'Payments', path: '' },

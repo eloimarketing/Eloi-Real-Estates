@@ -23,6 +23,7 @@ enum PropertyType {
   Farmhouse_Agricultural_Land
   CoWorking_Space
   Paying_Guest_Hostel
+  Independent_Commercial_Property
 }
 
 enum ListingType {
@@ -127,8 +128,8 @@ model Property {
   status               PropertyStatus @default(ACTIVE)
   googleMapLat         Float?
   googleMapLng         Float?
-  propertyRent         Float
-  securityDeposit      Float
+  propertyRent         Float?
+  securityDeposit      Float?
   advanceBookingAmount Float
   isVerified           Boolean        @default(false)
   createdAt            DateTime       @default(now())
@@ -145,18 +146,19 @@ model Property {
   inquiries Inquiry[]
 
   // Property type specific relations
-  apartmentFlat         ApartmentFlat?
-  independentHouseVilla IndependentHouseVilla?
-  plotLand              PlotLand?
-  officeSpace           OfficeSpace?
-  shopShowroom          ShopShowroom?
-  industrialProperty    IndustrialProperty?
-  farmhouseAgricultural FarmhouseAgricultural?
-  coWorkingSpace        CoWorkingSpace?
-  warehouseGodown       WarehouseGodown?
-  payingGuestHostel     PayingGuestHostel?
-  Cart                  Cart[]
-  WishList              WishList[]
+  apartmentFlat                 ApartmentFlat?
+  independentHouseVilla         IndependentHouseVilla?
+  plotLand                      PlotLand?
+  officeSpace                   OfficeSpace?
+  shopShowroom                  ShopShowroom?
+  industrialProperty            IndustrialProperty?
+  farmhouseAgricultural         FarmhouseAgricultural?
+  coWorkingSpace                CoWorkingSpace?
+  warehouseGodown               WarehouseGodown?
+  payingGuestHostel             PayingGuestHostel?
+  independentCommercialProperty IndependentCommercialProperty?
+  Cart                          Cart[]
+  WishList                      WishList[]
 
   @@map("properties")
 }
@@ -393,6 +395,91 @@ model PayingGuestHostel {
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@map("paying_guest_hostels")
+}
+
+enum PreviousUse {
+  RETAIL
+  OFFICE
+  SALON
+  ETC
+}
+
+enum Bathrooms {
+  EN_SUITE
+  SHARED
+}
+
+enum KitchenStyle {
+  Fitted
+  Modern
+  Open_Plan
+}
+
+enum GardenYardAccess {
+  Private
+  Shared
+  None
+}
+
+enum ResidenceParkingType {
+  Off_Street
+  On_Street
+  Permit
+}
+
+enum HeatingType {
+  Gas_Central
+  Electric
+  Other
+}
+
+enum StorageSpace {
+  Shed
+  Basement
+  Attic
+}
+
+enum Accessibility {
+  Step_Free
+  Disabled_Access
+}
+
+model IndependentCommercialProperty {
+  id                        String               @id @default(cuid())
+  propertyId                String               @unique
+  tenureAge                 Int // this is going to be in months
+  hasNearbyStation          Boolean
+  hasNearbyRoad             Boolean
+  hasNearbyBusStands        Boolean
+  previousUse               PreviousUse
+  classUse                  String
+  hasCustomerParking        Boolean
+  shopFrontageWidth         Int
+  hasSeparateBusinessAccess Boolean
+  flatArea                  Int
+  noOfBedrooms              Int
+  bathrooms                 Bathrooms
+  kitchenStyle              KitchenStyle
+  furnishing                FurnishingStatus
+  hasSeparateEntrance       Boolean
+  gardenYardAccess          GardenYardAccess
+  residenceParkingType      ResidenceParkingType
+  titleNumber               Int
+  councilTaxBand            String
+  EPCRating                 String
+  hasGas                    Boolean
+  hasWater                  Boolean
+  hasElectricity            Boolean
+  hasBuildingInsurance      Boolean
+  hasPlanningPermission     Boolean
+  hasCCTV                   Boolean
+  hasSecurityAlarmSystem    Boolean
+  hasInternetConnection     Boolean
+  heatingType               HeatingType
+  storageSpace              StorageSpace
+  accessibility             Accessibility
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Cart {

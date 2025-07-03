@@ -40,6 +40,43 @@ export const apartmentFlatSchema = z.object({
 	reraNumber: z.string().min(1),
 })
 
+export const independentCommercialSchema = z.object({
+	tenureAge: z.number().min(1), // this is going to be in months.
+	shopFrontageWidth: z.number(),
+	flatArea: z.number().min(1),
+	noOfBedrooms: z.number(),
+	titleNumber: z.number(),
+	classUse: z.string(),
+
+	EPCRating: z.string(),
+	councilTaxBand: z.string(),
+
+	bathrooms: z.enum(['EN_SUITE', 'SHARED']),
+	furnishingStatus: z.enum(['UNFURNISHED', 'SEMI_FURNISHED', 'FULLY_FURNISHED']),
+	previousUse: z.enum(['RETAIL', 'OFFICE', 'SALON', 'ETC']),
+	kitchenStyle: z.enum(['Fitted', 'Modern', 'Open_Plan']),
+	gardenYardAccess: z.enum(['Private', 'Shared', 'None']),
+	ResidenceParkingType: z.enum(['Off_Street', 'On_Street', 'Permit']),
+	heatingType: z.enum(['Gas_Central', 'Electric', 'Other']),
+	storageSpace: z.enum(['Shed', 'Basement', 'Attic']),
+	accessibility: z.enum(['Step_Free', 'Disabled_Access']),
+
+	hasNearbyStation: z.boolean(),
+	hasNearbyRoad: z.boolean(),
+	hasNearbyBusStands: z.boolean(),
+	hasCustomerParking: z.boolean(),
+	hasSeparateBusinessAccess: z.boolean(),
+	hasSeparateEntrance: z.boolean(),
+	hasGas: z.boolean(),
+	hasWater: z.boolean(),
+	hasElectricity: z.boolean(),
+	hasBuildingInsurance: z.boolean(),
+	hasPlanningPermission: z.boolean(),
+	hasCCTV: z.boolean(),
+	hasSecurityAlarmSystem: z.boolean(),
+	hasInternetConnection: z.boolean(),
+})
+
 export const independentHouseVillaSchema = z.object({
 	bedrooms: z.number().min(1),
 	plotArea: z.number().min(1),

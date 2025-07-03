@@ -6,7 +6,7 @@ import { useState } from 'react'
 import SelectPropertyType from './select-property-type'
 import { PropertyType } from '@/lib/enums'
 import ApartmentFlatForm from '../forms/apartment-flat'
-import IndependentHouseVillaForm from '../forms/independent-house-villa'
+import IndependentCommercialPropertyForm from '../forms/Independent-commercial-property'
 
 export default function CreateProperty() {
 	const [propertyType, setPropertyType] = useState<PropertyType>()
@@ -21,7 +21,8 @@ export default function CreateProperty() {
 
 			<div className="my-6">
 				{propertyType === 'Apartment_Flat' && <ApartmentFlatForm />}
-				{propertyType === 'Independent_House_Villa' && <IndependentHouseVillaForm />}
+				{propertyType === 'Independent_Commercial_Property' && <IndependentCommercialPropertyForm />}
+				{/* {propertyType === 'Independent_House_Villa' && <IndependentHouseVillaForm />} */}
 			</div>
 		</MaxWidthWrapper>
 	)

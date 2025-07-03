@@ -13,6 +13,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ id: s
 		include: {
 			apartmentFlat: true,
 			independentHouseVilla: true,
+			independentCommercialProperty: true,
 			location: true,
 			owner: true,
 		},

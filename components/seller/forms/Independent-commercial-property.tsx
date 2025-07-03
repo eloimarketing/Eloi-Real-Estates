@@ -13,12 +13,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { commonInfoSchema, apartmentFlatSchema } from '@/lib/schema/backend/property'
+import { commonInfoSchema, independentCommercialSchema } from '@/lib/schema/backend/property'
 import { getCitiesByState, IndianStates, getCurrentLocation } from '@/utils/constant/data'
 
-const FormSchema = commonInfoSchema.merge(apartmentFlatSchema)
+const FormSchema = commonInfoSchema.merge(independentCommercialSchema)
 
-export default function ApartmentFlatForm() {
+export default function IndependentCommercialPropertyForm() {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const router = useRouter()
 	const [cities, setCities] = useState<string[]>([''])
@@ -35,26 +35,33 @@ export default function ApartmentFlatForm() {
 			pincode: '',
 			googleMapLat: 0,
 			googleMapLng: 0,
-			bhk: 1,
 			vendorContactNumber: '',
 			propertyRent: 0,
+			councilTaxBand: '',
 			securityDeposit: 0,
 			advanceBookingAmount: 0,
-			carpetArea: 0,
-			builtUpArea: 0,
-			floorNumber: 0,
-			totalFloors: 0,
-			bathrooms: 0,
-			ageOfProperty: 0,
-			reraNumber: '',
-			balcony: false,
-			parking: false,
-			hasLift: false,
-			hasSecurity: false,
-			hasGym: false,
-			hasSwimmingPool: false,
-			hasPowerBackup: false,
-			hasGarden: false,
+			tenureAge: 0,
+			hasNearbyStation: false,
+			hasNearbyRoad: false,
+			hasNearbyBusStands: false,
+			classUse: '',
+			hasCustomerParking: false,
+			shopFrontageWidth: 0,
+			hasSeparateBusinessAccess: false,
+			flatArea: 0,
+			noOfBedrooms: 0,
+			hasSeparateEntrance: false,
+			titleNumber: 0,
+			EPCRating: '',
+			hasGas: false,
+			hasWater: false,
+			hasElectricity: false,
+			hasBuildingInsurance: false,
+			hasPlanningPermission: false,
+			hasCCTV: false,
+			hasSecurityAlarmSystem: false,
+			hasInternetConnection: false,
+
 			images: [],
 			videos: [],
 		},
@@ -77,7 +84,7 @@ export default function ApartmentFlatForm() {
 			const formData = new FormData()
 
 			// Add property type
-			formData.append('propertyType', 'Apartment_Flat')
+			formData.append('propertyType', 'Independent_Commercial_Property')
 			formData.append('status', 'ACTIVE') // Add status field as seen in backend
 
 			// Add all form fields
@@ -95,8 +102,6 @@ export default function ApartmentFlatForm() {
 				}
 			})
 
-			formData.append('propertyType', 'Apartment_Flat')
-
 			const response = await fetch('/api/seller/property/create', {
 				method: 'POST',
 				body: formData,
@@ -112,7 +117,7 @@ export default function ApartmentFlatForm() {
 			setTimeout(() => {
 				router.push(`/seller/property/${result.createdData.id}`)
 			}, 1500)
-			// form.reset()
+			form.reset()
 		} catch (error) {
 			console.error('Error creating property:', error)
 			toast.error('Failed to create property. Please try again.')
@@ -391,33 +396,14 @@ export default function ApartmentFlatForm() {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<FormField
 								control={form.control}
-								name="bhk"
+								name="tenureAge"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>BHK</FormLabel>
+										<FormLabel>Tenure Age (months)</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
 												placeholder="e.g., 2, 3"
-												{...field}
-												onChange={e => field.onChange(parseInt(e.target.value) || 0)}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="bathrooms"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Bathrooms</FormLabel>
-										<FormControl>
-											<Input
-												type="number"
-												placeholder="Number of bathrooms"
 												{...field}
 												onChange={e => field.onChange(parseInt(e.target.value) || 0)}
 											/>
@@ -431,10 +417,10 @@ export default function ApartmentFlatForm() {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<FormField
 								control={form.control}
-								name="carpetArea"
+								name="shopFrontageWidth"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Carpet Area (sq ft)</FormLabel>
+										<FormLabel>Shop Frontage Width (sq ft)</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
@@ -450,10 +436,10 @@ export default function ApartmentFlatForm() {
 
 							<FormField
 								control={form.control}
-								name="builtUpArea"
+								name="flatArea"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Built-up Area (sq ft)</FormLabel>
+										<FormLabel>Flat Area (sq ft)</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
@@ -471,14 +457,14 @@ export default function ApartmentFlatForm() {
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 							<FormField
 								control={form.control}
-								name="floorNumber"
+								name="noOfBedrooms"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Floor Number</FormLabel>
+										<FormLabel>Bedroom Count</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
-												placeholder="Floor number"
+												placeholder="Total Bedrooms"
 												{...field}
 												onChange={e => field.onChange(parseInt(e.target.value) || 0)}
 											/>
@@ -490,14 +476,14 @@ export default function ApartmentFlatForm() {
 
 							<FormField
 								control={form.control}
-								name="totalFloors"
+								name="titleNumber"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Total Floors</FormLabel>
+										<FormLabel>Title Numbers</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
-												placeholder="Total floors"
+												placeholder="Title Numbers"
 												{...field}
 												onChange={e => field.onChange(parseInt(e.target.value) || 0)}
 											/>
@@ -509,17 +495,12 @@ export default function ApartmentFlatForm() {
 
 							<FormField
 								control={form.control}
-								name="ageOfProperty"
+								name="classUse"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Age of Property (years)</FormLabel>
+										<FormLabel>Class Use</FormLabel>
 										<FormControl>
-											<Input
-												type="number"
-												placeholder="Property age"
-												{...field}
-												onChange={e => field.onChange(parseInt(e.target.value) || 0)}
-											/>
+											<Input type="text" placeholder="Class Use" {...field} onChange={e => field.onChange(e.target.value || '')} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -544,7 +525,6 @@ export default function ApartmentFlatForm() {
 												<SelectItem value="UNFURNISHED">Unfurnished</SelectItem>
 												<SelectItem value="SEMI_FURNISHED">Semi Furnished</SelectItem>
 												<SelectItem value="FULLY_FURNISHED">Fully Furnished</SelectItem>
-												<SelectItem value="BARE_SHELL">Bare Shell</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -554,25 +534,21 @@ export default function ApartmentFlatForm() {
 
 							<FormField
 								control={form.control}
-								name="facingDirection"
+								name="previousUse"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Facing Direction</FormLabel>
+										<FormLabel>Previous Use</FormLabel>
 										<Select onValueChange={field.onChange} defaultValue={field.value}>
 											<FormControl>
 												<SelectTrigger>
-													<SelectValue placeholder="Select facing direction" />
+													<SelectValue placeholder="What was previous use case" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value="NORTH">North</SelectItem>
-												<SelectItem value="SOUTH">South</SelectItem>
-												<SelectItem value="EAST">East</SelectItem>
-												<SelectItem value="WEST">West</SelectItem>
-												<SelectItem value="NORTH_EAST">North East</SelectItem>
-												<SelectItem value="NORTH_WEST">North West</SelectItem>
-												<SelectItem value="SOUTH_EAST">South East</SelectItem>
-												<SelectItem value="SOUTH_WEST">South West</SelectItem>
+												<SelectItem value="RETAIL">Retail</SelectItem>
+												<SelectItem value="OFFICE">Office</SelectItem>
+												<SelectItem value="SALON">Salon</SelectItem>
+												<SelectItem value="ETC">Etc</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -582,6 +558,171 @@ export default function ApartmentFlatForm() {
 						</div>
 					</div>
 
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<FormField
+							control={form.control}
+							name="kitchenStyle"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Kitchen Style</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Select furnishing status" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="Fitted">Fitted</SelectItem>
+											<SelectItem value="Modern">Modern</SelectItem>
+											<SelectItem value="Open_Plan">Open Plan</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="gardenYardAccess"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Garden Yard Access</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="What was previous use case" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="Private">Private</SelectItem>
+											<SelectItem value="Shared">Shared</SelectItem>
+											<SelectItem value="None">None</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<FormField
+							control={form.control}
+							name="ResidenceParkingType"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Residance Parking Type</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Residence Parking Type" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="Off_Street">Off Street</SelectItem>
+											<SelectItem value="On_Street">On Street</SelectItem>
+											<SelectItem value="Permit">Permit</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="heatingType"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Heating Type</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Heating Type" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="Gas_Central">Gas Central</SelectItem>
+											<SelectItem value="Electric">Electric</SelectItem>
+											<SelectItem value="Other">Other</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<FormField
+							control={form.control}
+							name="storageSpace"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Storage Space</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Storage Space Type" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="Shed">Shed</SelectItem>
+											<SelectItem value="Basement">Basement</SelectItem>
+											<SelectItem value="Attic">Attic</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="accessibility"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Accessibility</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Accessibility" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="Step_Free">Step Free</SelectItem>
+											<SelectItem value="Disabled_Access">Disabled Access</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="bathrooms"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Bathrooms</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Accessibility" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="EN_SUITE">En Suite</SelectItem>
+											<SelectItem value="SHARED">Shared</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+
 					{/* Amenities */}
 					<div className="space-y-4">
 						<h2 className="text-lg font-semibold">Amenities</h2>
@@ -589,104 +730,182 @@ export default function ApartmentFlatForm() {
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 							<FormField
 								control={form.control}
-								name="balcony"
+								name="hasNearbyStation"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Balcony</FormLabel>
+										<FormLabel>Nearby Station</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="parking"
+								name="hasNearbyRoad"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Parking</FormLabel>
+										<FormLabel>Nearby Road</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="hasLift"
+								name="hasNearbyBusStands"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Lift</FormLabel>
+										<FormLabel>Nearby Bus Stands</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="hasSecurity"
+								name="hasCustomerParking"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Security</FormLabel>
+										<FormLabel>Customer Parking</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="hasGym"
+								name="hasSeparateBusinessAccess"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Gym</FormLabel>
+										<FormLabel>Separate Business Access</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="hasSwimmingPool"
+								name="hasSeparateEntrance"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Swimming Pool</FormLabel>
+										<FormLabel>Separate Entrance</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="hasPowerBackup"
+								name="hasGas"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Power Backup</FormLabel>
+										<FormLabel>Gas</FormLabel>
 									</FormItem>
 								)}
 							/>
 
 							<FormField
 								control={form.control}
-								name="hasGarden"
+								name="hasWater"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 										<FormControl>
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
-										<FormLabel>Garden</FormLabel>
+										<FormLabel>Water Availibility</FormLabel>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="hasElectricity"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<FormLabel>Electricity</FormLabel>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="hasBuildingInsurance"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<FormLabel>Building Insurance</FormLabel>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="hasPlanningPermission"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<FormLabel>Has Planning Permission</FormLabel>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="hasCCTV"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<FormLabel>CCTV</FormLabel>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="hasSecurityAlarmSystem"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<FormLabel>Security Alarm System</FormLabel>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="hasInternetConnection"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<FormLabel>Internet Connection</FormLabel>
 									</FormItem>
 								)}
 							/>
@@ -714,12 +933,12 @@ export default function ApartmentFlatForm() {
 
 							<FormField
 								control={form.control}
-								name="reraNumber"
+								name="EPCRating"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>RERA Number</FormLabel>
+										<FormLabel>EPC Rating</FormLabel>
 										<FormControl>
-											<Input placeholder="Enter RERA number" {...field} />
+											<Input placeholder="Enter EPC Rating" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -769,6 +988,20 @@ export default function ApartmentFlatForm() {
 											{...field}
 											onChange={e => field.onChange(parseInt(e.target.value) || 0)}
 										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="councilTaxBand"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Council Tax Band</FormLabel>
+									<FormControl>
+										<Input placeholder="Council Tax Band" {...field} onChange={e => field.onChange(e.target.value || '')} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

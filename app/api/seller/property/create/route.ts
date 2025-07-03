@@ -12,6 +12,7 @@ import {
 	farmhouseAgriculturalLandSchema,
 	payingGuestHostelSchema,
 	coWorkingSpaceSchema,
+	independentCommercialSchema,
 } from '@/lib/schema/backend/property'
 import prisma from '@/lib/prisma/prisma'
 
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
 			pincode: formData.get('pincode') as string,
 			googleMapLat: Number(formData.get('googleMapLat')),
 			googleMapLng: Number(formData.get('googleMapLng')),
-			listingType: (formData.get('availabilityStatus') as string) || 'FOR_SALE',
+			listingType: (formData.get('listingType') as string) || 'FOR_SALE',
 			vendorContactNumber: formData.get('vendorContactNumber') as string,
 			propertyRent: Number(formData.get('propertyRent')),
 			securityDeposit: Number(formData.get('securityDeposit')),
@@ -77,6 +78,46 @@ export async function POST(request: Request) {
 			validatedPropertyInfo = validatingSchema.parse({ ...apartmentFlatRawData, ...commonInfo })
 
 			// For creating Independent_House_Villa
+		} else if (propertyType === 'Independent_Commercial_Property') {
+			const independentCommercialProperty = {
+				tenureAge: Number(formData.get('tenureAge')),
+				shopFrontageWidth: Number(formData.get('shopFrontageWidth')),
+				flatArea: Number(formData.get('flatArea')),
+				noOfBedrooms: Number(formData.get('noOfBedrooms')),
+				titleNumber: Number(formData.get('titleNumber')),
+				classUse: formData.get('classUse'),
+
+				EPCRating: formData.get('EPCRating'),
+				councilTaxBand: formData.get('councilTaxBand'),
+
+				furnishingStatus: formData.get('furnishingStatus') as 'UNFURNISHED' | 'SEMI_FURNISHED' | 'FULLY_FURNISHED',
+				previousUse: formData.get('previousUse') as 'Retail' | 'Office' | 'Salon' | 'Etc',
+				kitchenStyle: formData.get('kitchenStyle') as 'Fitted' | 'Modern' | 'Open_Plan',
+				gardenYardAccess: formData.get('gardenYardAccess') as 'Private' | 'Shared' | 'None',
+				ResidenceParkingType: formData.get('ResidenceParkingType') as 'Off_Street' | 'On_Street' | 'Permit',
+				heatingType: formData.get('heatingType') as 'Gas_Central' | 'Electric' | 'Other',
+				storageSpace: formData.get('storageSpace') as 'Shed' | 'Basement' | 'Attic',
+				accessibility: formData.get('accessibility') as 'Step_Free' | 'Disabled_Access',
+				bathrooms: formData.get('bathrooms') as 'EN_SUITE' | 'SHARED',
+
+				hasNearbyStation: formData.get('hasNearbyStation') === 'true',
+				hasNearbyRoad: formData.get('hasNearbyRoad') === 'true',
+				hasNearbyBusStands: formData.get('hasNearbyBusStands') === 'true',
+				hasCustomerParking: formData.get('hasCustomerParking') === 'true',
+				hasSeparateBusinessAccess: formData.get('hasSeparateBusinessAccess') === 'true',
+				hasSeparateEntrance: formData.get('hasSeparateEntrance') === 'true',
+				hasGas: formData.get('hasGas') === 'true',
+				hasWater: formData.get('hasWater') === 'true',
+				hasElectricity: formData.get('hasElectricity') === 'true',
+				hasBuildingInsurance: formData.get('hasBuildingInsurance') === 'true',
+				hasPlanningPermission: formData.get('hasPlanningPermission') === 'true',
+				hasCCTV: formData.get('hasCCTV') === 'true',
+				hasSecurityAlarmSystem: formData.get('hasSecurityAlarmSystem') === 'true',
+				hasInternetConnection: formData.get('hasInternetConnection') === 'true',
+			}
+
+			const validatingSchema = independentCommercialSchema.merge(commonInfoSchema)
+			validatedPropertyInfo = validatingSchema.parse({ ...independentCommercialProperty, ...commonInfo })
 		} else if (propertyType === 'Independent_House_Villa') {
 			const independentHouseVillaRawData = {
 				bedrooms: parseInt((formData.get('bedrooms') as string) || '0'),
@@ -296,6 +337,44 @@ export async function POST(request: Request) {
 							hasPowerBackup: validatedPropertyInfo.hasPowerBackup,
 							hasGarden: validatedPropertyInfo.hasGarden,
 							...(validatedPropertyInfo.reraNumber && { reraNumber: validatedPropertyInfo.reraNumber }),
+						},
+					},
+				}),
+
+				...(propertyType === 'Independent_Commercial_Property' && {
+					independentCommercialProperty: {
+						create: {
+							tenureAge: validatedPropertyInfo.tenureAge,
+							bathrooms: validatedPropertyInfo.bathrooms,
+							shopFrontageWidth: validatedPropertyInfo.shopFrontageWidth,
+							flatArea: validatedPropertyInfo.flatArea,
+							noOfBedrooms: validatedPropertyInfo.noOfBedrooms,
+							titleNumber: validatedPropertyInfo.titleNumber,
+							classUse: validatedPropertyInfo.classUse,
+							EPCRating: validatedPropertyInfo.EPCRating,
+							councilTaxBand: validatedPropertyInfo.councilTaxBand,
+							furnishing: validatedPropertyInfo.furnishingStatus,
+							previousUse: validatedPropertyInfo.previousUse,
+							kitchenStyle: validatedPropertyInfo.kitchenStyle,
+							gardenYardAccess: validatedPropertyInfo.gardenYardAccess,
+							residenceParkingType: validatedPropertyInfo.ResidenceParkingType,
+							heatingType: validatedPropertyInfo.heatingType,
+							storageSpace: validatedPropertyInfo.storageSpace,
+							accessibility: validatedPropertyInfo.accessibility,
+							hasNearbyStation: validatedPropertyInfo.hasNearbyStation,
+							hasNearbyRoad: validatedPropertyInfo.hasNearbyRoad,
+							hasNearbyBusStands: validatedPropertyInfo.hasNearbyBusStands,
+							hasCustomerParking: validatedPropertyInfo.hasCustomerParking,
+							hasSeparateBusinessAccess: validatedPropertyInfo.hasSeparateBusinessAccess,
+							hasSeparateEntrance: validatedPropertyInfo.hasSeparateEntrance,
+							hasGas: validatedPropertyInfo.hasGas,
+							hasWater: validatedPropertyInfo.hasWater,
+							hasElectricity: validatedPropertyInfo.hasElectricity,
+							hasBuildingInsurance: validatedPropertyInfo.hasBuildingInsurance,
+							hasPlanningPermission: validatedPropertyInfo.hasPlanningPermission,
+							hasCCTV: validatedPropertyInfo.hasCCTV,
+							hasSecurityAlarmSystem: validatedPropertyInfo.hasSecurityAlarmSystem,
+							hasInternetConnection: validatedPropertyInfo.hasInternetConnection,
 						},
 					},
 				}),

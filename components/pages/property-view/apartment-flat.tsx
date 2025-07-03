@@ -26,6 +26,7 @@ import PropertyMap from '@/components/map'
 import MaxWidthWrapper from '@/components/max-width-wrapper'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { Badge } from '@/components/ui/badge'
 
 type PropertyWithAll = Prisma.PropertyGetPayload<{
 	include: {
@@ -139,18 +140,37 @@ export default function ApartmentFlatViewPage({ property }: { property: Property
 
 						{/* Property Details */}
 						<div className="bg-white rounded-2xl p-6 shadow-lg">
-							<div className="flex justify-between items-start mb-6">
+							<div className="flex justify-between items-start">
 								<div>
-									<h1 className="text-2xl font-bold text-gray-900 mb-2">{property.title}</h1>
-									<div className="flex items-center text-gray-600 mb-4">
+									<h1 className="text-2xl font-bold text-gray-900">{property.title} </h1>
+									<div className="flex flex-col gap-2">
+										{property.listingType === 'FOR_RENT' ? <Badge>For Rent</Badge> : <Badge>For Sale</Badge>}
+										<Badge>{property.apartmentFlat && 'Apartment Flat'}</Badge>
+									</div>
+
+									<div className="flex items-center text-gray-600  my-2">
 										<MapPin className="w-4 h-4 mr-1" />
-										<span>{property.location.address}</span>
+										<div>{property.location.address}</div>
 									</div>
 								</div>
 								<button className="p-2 hover:bg-gray-100 rounded-full">
 									<Share2 className="w-5 h-5 text-gray-600" />
 								</button>
 							</div>
+
+							{property.listingType === 'FOR_RENT' ? (
+								<div className="p-4 rounded-md bg-blue-300 mb-4">
+									<div className="text-black font-semibold">
+										Rent Price <span className="text-white"> ₹{formatPrice(property.propertyRent!)}/Monthly</span>
+									</div>
+								</div>
+							) : (
+								<div className="p-4 rounded-md bg-blue-300 mb-4">
+									<div className="text-black font-semibold">
+										Property Price <span className="text-white"> ₹{formatPrice(property.price)}</span>
+									</div>
+								</div>
+							)}
 
 							{/* Price and Area */}
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

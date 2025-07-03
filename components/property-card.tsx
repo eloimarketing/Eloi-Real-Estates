@@ -3,12 +3,13 @@ import Image from 'next/image'
 import { buttonVariants } from './ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
-import { Property } from '@prisma/client'
+import { Property, UserRole } from '@prisma/client'
 import Link from 'next/link'
 
-export default function PropertyCard({ property }: { property: Property }) {
+export default function PropertyCard({ property, role = 'BUYER' }: { property: Property; role?: UserRole }) {
+	const userRole = role === 'BUYER' ? 'user' : role.toLowerCase()
 	return (
-		<Link href={`/user/property/${property.id}`}>
+		<Link href={`/${userRole}/property/${property.id}`}>
 			<div className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
 				<div className="h-58 overflow-hidden">
 					<Image

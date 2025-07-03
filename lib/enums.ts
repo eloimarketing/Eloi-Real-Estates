@@ -1,14 +1,14 @@
-// lib/enums.ts
 export enum PropertyType {
 	Apartment_Flat = 'Apartment_Flat',
-	Independent_House_Villa = 'Independent_House_Villa',
-	Plot_Land = 'Plot_Land',
-	Office_Space = 'Office_Space',
-	Shop_Showroom = 'Shop_Showroom',
-	Warehouse_Godown = 'Warehouse_Godown',
-	Farmhouse_Agricultural_Land = 'Farmhouse_Agricultural_Land',
-	CoWorking_Space = 'CoWorking_Space',
-	Paying_Guest_Hostel = 'Paying_Guest_Hostel',
+	Independent_Commercial_Property = 'Independent_Commercial_Property',
+	// Independent_House_Villa = 'Independent_House_Villa',
+	// Plot_Land = 'Plot_Land',
+	// Office_Space = 'Office_Space',
+	// Shop_Showroom = 'Shop_Showroom',
+	// Warehouse_Godown = 'Warehouse_Godown',
+	// Farmhouse_Agricultural_Land = 'Farmhouse_Agricultural_Land',
+	// CoWorking_Space = 'CoWorking_Space',
+	// Paying_Guest_Hostel = 'Paying_Guest_Hostel',
 }
 
 export enum ListingType {
