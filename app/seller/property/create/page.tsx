@@ -1,5 +1,5 @@
 import MaxWidthWrapper from '@/components/max-width-wrapper'
-import CreateProperty from '@/components/seller/property/create-property'
+import CreateProperty from '@/components/seller/layouts/create-property'
 
 export default async function CreatePropertyPage() {
 	return (

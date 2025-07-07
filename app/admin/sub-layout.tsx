@@ -1,5 +1,5 @@
 import Navbar from '@/components/navbar'
-import SellerSidebar from '@/components/seller/seller-sidebar'
+import AdminSidebar from '@/components/admin/admin-sidebar'
 
 export default function SubLayout() {
 	return (
@@ -8,7 +8,7 @@ export default function SubLayout() {
 				<Navbar />
 			</div>
 			<div className="hidden sm:block min-w-64 w-[20%] h-full border-r p-4 bg-gray-200">
-				<SellerSidebar />
+				<AdminSidebar />
 			</div>
 		</div>
 	)

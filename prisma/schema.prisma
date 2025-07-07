@@ -16,6 +16,7 @@ enum UserRole {
 enum PropertyType {
   Apartment_Flat
   Independent_House_Villa
+  Industrial_Property
   Plot_Land
   Office_Space
   Shop_Showroom

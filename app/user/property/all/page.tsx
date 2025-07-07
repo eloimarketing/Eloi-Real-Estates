@@ -3,6 +3,7 @@ import PropertyCard from '@/components/property-card'
 import { Button } from '@/components/ui/button'
 import prisma from '@/lib/prisma/prisma'
 import Link from 'next/link'
+import { auth } from '@/auth'
 
 export default async function AllProperties({
 	searchParams,
@@ -11,6 +12,9 @@ export default async function AllProperties({
 		[key: string]: string | string[] | undefined
 	}>
 }) {
+	const session = await auth()
+	const user = session?.user
+
 	const params = await searchParams
 
 	const data = params && params.data && Object.keys(params.data).length > 0 && JSON.parse(params.data!.toString())
@@ -70,7 +74,7 @@ export default async function AllProperties({
 	return (
 		<MaxWidthWrapper className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
 			{allProperties.map((property, indx) => (
-				<PropertyCard key={indx} property={property} />
+				<PropertyCard key={indx} property={property} role={user?.role || 'BUYER'} />
 			))}
 		</MaxWidthWrapper>
 	)

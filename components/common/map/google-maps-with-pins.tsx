@@ -27,7 +27,7 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		// Create map if it doesn't exist
 		if (!mapInstanceRef.current) {
 			mapInstanceRef.current = new google.maps.Map(mapRef.current, {
-				zoom: 5,
+				zoom: 3,
 				center,
 			})
 		}

@@ -11,12 +11,12 @@ import {
 	Home,
 	Building2,
 	Phone,
-	LayoutDashboard,
 	Settings,
 	User as UserIcon,
 	ChevronRight,
+	Building,
 } from 'lucide-react'
-import SignOutBtn from './sign-out-btn'
+import SignOutBtn from './common/map/sign-out-btn'
 import { Cart } from '@prisma/client'
 import { useState } from 'react'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from './ui/sheet'
@@ -38,17 +38,18 @@ export default function NavbarLinks({ user, cart }: { user: User | undefined; ca
 
 	const vendorFields = [
 		{ name: 'Home', href: '/', icon: Home, visible: true },
-		{ name: 'Dashboard', href: '/seller', icon: LayoutDashboard, visible: true },
-		{ name: 'Add Property', href: '/seller/property/create', icon: Building2, visible: true },
-		{ name: 'Contact Us', href: '/contact', icon: Phone, visible: false },
+		{ name: 'Add Property', href: '/seller/property/create', icon: Building, visible: true },
+		{ name: 'All Properties', href: '/seller/property', icon: Building2, visible: true },
 		{ name: 'Profile', href: '/seller/profile', icon: UserIcon, visible: false },
+		{ name: 'Contact Us', href: '/contact', icon: Phone, visible: true },
 		{ name: 'About Us', href: '/terms-and-conditions', icon: Settings, visible: true },
 	]
 
 	const adminFields = [
 		{ name: 'Home', href: '/', icon: Home, visible: true },
 		{ name: 'All Properties', href: '/admin/all-property', icon: Building2, visible: true },
-		{ name: 'Settings', href: '/admin/settings', icon: Settings, visible: true },
+		{ name: 'Contact Us', href: '/contact', icon: Phone, visible: true },
+		{ name: 'About Us', href: '/terms-and-conditions', icon: Settings, visible: true },
 	]
 
 	const getFieldsForUser = () => {

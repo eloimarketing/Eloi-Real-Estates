@@ -4,16 +4,12 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-export default function SellerSidebar() {
+export default function AdminSidebar() {
 	const pathname = usePathname()
 
 	const links = [
-		{ name: 'Dashboard', path: '/seller' },
-		{ name: 'Add Property', path: '/seller/property/create' },
-		{ name: 'All Properties', path: '/seller/property' },
-		{ name: 'Orders', path: '' },
-		{ name: 'Payments', path: '' },
-		{ name: 'Profile', path: '/seller/profile' },
+		{ name: 'All Properties', path: '/admin/all-property' },
+		{ name: 'Profile', path: '/admin/profile' },
 	]
 
 	return (

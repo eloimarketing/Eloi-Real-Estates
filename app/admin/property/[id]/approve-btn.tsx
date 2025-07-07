@@ -3,19 +3,34 @@
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Loader } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
-export default function ApprovePropertyBtn({ propertyId }: { propertyId: string }) {
+export default function ApprovePropertyBtn({ propertyId, className = '' }: { propertyId: string; className?: string }) {
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
+	const [alreadyApproved, setAlreadyApproved] = useState(false)
+
+	useEffect(() => {
+		if (!propertyId) {
+			toast.error('Property ID is required')
+		}
+		// Check if the property is already approved
+		axios.get(`/api/admin/property/approve/${propertyId}`).then(res => {
+			if (res.status === 200) {
+				setAlreadyApproved(true)
+			} else {
+				setAlreadyApproved(false)
+			}
+		})
+	}, [propertyId])
 
 	async function approveProperty() {
 		setLoading(true)
 		try {
 			const res = await axios.post('/api/admin/property/approve', { propertyId })
-			// const data = res.data
 
 			if (res.status === 200) {
 				toast.success('Property approved successfully!')
@@ -30,8 +45,8 @@ export default function ApprovePropertyBtn({ propertyId }: { propertyId: string 
 		setLoading(false)
 	}
 	return (
-		<Button className="mt-10 w-full" onClick={approveProperty} disabled={loading}>
-			Approve Property {loading && <Loader className="animate-spin ml-1" />}
+		<Button className={cn(className)} onClick={approveProperty} disabled={alreadyApproved || loading}>
+			{alreadyApproved ? 'Property Already Approved' : loading ? <Loader className="animate-spin" /> : 'Approve Property'}
 		</Button>
 	)
 }

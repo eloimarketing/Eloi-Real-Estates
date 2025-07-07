@@ -1,6 +1,6 @@
+import { redirect } from 'next/navigation'
 import SubLayout from './sub-layout'
 import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
 
 export default async function RootLayout({
 	children,
@@ -10,7 +10,7 @@ export default async function RootLayout({
 	const session = await auth()
 	const user = session?.user
 
-	if (!user || user.role !== 'SELLER') {
+	if (!user || user.role !== 'ADMIN') {
 		redirect('/')
 	}
 

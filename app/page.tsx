@@ -5,12 +5,16 @@ import { Handshake } from 'lucide-react'
 import Image from 'next/image'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { PropertyType } from '@prisma/client'
-import GoogleMapWithPins from '@/components/google-maps-with-pins'
+import GoogleMapWithPins from '@/components/common/map/google-maps-with-pins'
 import prisma from '@/lib/prisma/prisma'
 import SearchBar from '@/components/homepage/search-bar'
 import Link from 'next/link'
+import { auth } from '@/auth'
 
 export default async function Home() {
+	const session = await auth()
+	const user = session?.user
+
 	const allProperties = await prisma.property.findMany({ where: { isVerified: true }, include: { location: true } })
 
 	const propertyList = allProperties.map(property => ({
@@ -59,7 +63,7 @@ export default async function Home() {
 								<CarouselContent>
 									{propertiesByCity[city].map((property, indx) => (
 										<CarouselItem key={indx} className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-											<PropertyCard key={indx} property={property} />
+											<PropertyCard key={indx} property={property} role={user?.role || 'BUYER'} />
 										</CarouselItem>
 									))}
 								</CarouselContent>

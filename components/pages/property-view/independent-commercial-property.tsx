@@ -39,7 +39,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { Prisma } from '@prisma/client'
-import PropertyMap from '@/components/map'
+import PropertyMap from '@/components/common/map/google-maps-with-pins'
 import MaxWidthWrapper from '@/components/max-width-wrapper'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
@@ -422,7 +422,7 @@ export default function IndependentCommercialViewPage({ property }: { property: 
 					</div>
 				</div>
 				<div className="mt-4">
-					<PropertyMap latitude={property.googleMapLat!} longitude={property.googleMapLng!} propertyName={property.title} />
+					<PropertyMap properties={[{ lat: property.googleMapLat!, lng: property.googleMapLng!, title: property.title }]} />
 				</div>
 			</MaxWidthWrapper>
 		</div>

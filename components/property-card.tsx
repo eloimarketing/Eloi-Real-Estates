@@ -6,8 +6,9 @@ import { cn } from '@/lib/utils'
 import { Property, UserRole } from '@prisma/client'
 import Link from 'next/link'
 
-export default function PropertyCard({ property, role = 'BUYER' }: { property: Property; role?: UserRole }) {
+export default function PropertyCard({ property, role }: { property: Property; role: UserRole }) {
 	const userRole = role === 'BUYER' ? 'user' : role.toLowerCase()
+
 	return (
 		<Link href={`/${userRole}/property/${property.id}`}>
 			<div className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
