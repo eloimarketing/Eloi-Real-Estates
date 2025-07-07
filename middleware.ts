@@ -39,7 +39,7 @@ export default auth(async function middleware(request) {
 			return NextResponse.redirect(newUrl)
 		}
 
-		const newUrl = new URL('/api', request.nextUrl.origin)
+		const newUrl = new URL('/', request.nextUrl.origin)
 		// return Response.redirect(newUrl)
 		return NextResponse.redirect(newUrl)
 	}

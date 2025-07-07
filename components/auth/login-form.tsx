@@ -96,9 +96,9 @@ export function LoginForm() {
 							<FormItem>
 								<FormLabel className="flex items-center justify-between gap-2">
 									Password{' '}
-									<Link href="/forgot-password" className="ml-auto font-normal text-sm underline-offset-4 hover:underline">
+									{/* <Link href="/forgot-password" className="ml-auto font-normal text-sm underline-offset-4 hover:underline">
 										Forgot your password?
-									</Link>
+									</Link> */}
 								</FormLabel>
 								<FormControl>
 									<Input type="password" placeholder="********" {...field} />
