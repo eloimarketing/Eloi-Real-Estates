@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import {
 	MapPin,
 	Phone,
@@ -61,6 +61,7 @@ import {
 	WarehouseGodown,
 	User as prismaUser,
 } from '@prisma/client'
+import BookingPaymentForm from '@/app/user/property/[id]/bookingPaymentBox'
 
 const PropertyViewPage = ({
 	property,
@@ -86,6 +87,7 @@ const PropertyViewPage = ({
 }) => {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0)
 	const [activeTab, setActiveTab] = useState('overview')
+	const [isCartModalOpen, setIsCartModalOpan] = useState(false)
 
 	const formatPrice = price => {
 		if (price >= 10000000) {
@@ -1320,12 +1322,16 @@ const PropertyViewPage = ({
 						{/* Quick Actions */}
 						<div className="bg-white rounded-lg shadow-sm p-6">
 							<h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-							<Button className="w-full">Add to Wishlist</Button>
+							<Button className="w-full" onClick={() => setIsCartModalOpan(true)}>
+								Add to Cart
+							</Button>
 							{isAdmin && <ApprovePropertyBtn propertyId={property.id} className="w-full mt-2" />}
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<BookingPaymentForm propertyId={property.id} isOpen={isCartModalOpen} setOpen={setIsCartModalOpan} />
 		</div>
 	)
 }

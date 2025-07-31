@@ -6,20 +6,20 @@ export async function POST(request: NextRequest) {
 	try {
 		const session = await auth()
 		const user = session?.user
-		const popertyId = await request.json()
-		console.log(popertyId, 'asdf asdf')
+		const { propertyId, isAgreementRequested, isLegalAdviceRequested, isPayAdvanceRequested, isVisitRequested, visitDate } =
+			await request.json()
 
-		if (!user) {
-			return new Response('Unauthorized', {
-				status: 401,
-				statusText: 'Unauthorized',
-			})
-		}
+		console.log(propertyId, isAgreementRequested, isLegalAdviceRequested, isPayAdvanceRequested, isVisitRequested, visitDate)
 
 		const cart = await prisma.cart.create({
 			data: {
-				userId: user.id!,
-				propertyId: popertyId,
+				userId: user!.id!,
+				propertyId: propertyId,
+				isAgreementRequested,
+				isLegalAdviceRequested,
+				isPayAdvanceRequested,
+				isVisitRequested,
+				...(isVisitRequested && { visitDate }),
 			},
 		})
 

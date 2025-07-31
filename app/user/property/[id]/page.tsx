@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma/prisma'
 import { notFound } from 'next/navigation'
 import MaxWidthWrapper from '@/components/max-width-wrapper'
 import PropertyViewPage from '@/components/common/property'
+import BookingPaymentForm from './bookingPaymentBox'
 
 export default async function PropertyPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params

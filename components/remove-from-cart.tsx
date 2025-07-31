@@ -19,7 +19,7 @@ export default function RemoveFromCart({ propertyId }: { propertyId: string }) {
 				})
 				redirect('/user/cart')
 			}}>
-			<Button type="submit">Remove from Cart</Button>
+			<Button type="submit">Remove</Button>
 		</form>
 	)
 }

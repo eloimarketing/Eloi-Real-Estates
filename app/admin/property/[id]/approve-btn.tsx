@@ -18,13 +18,15 @@ export default function ApprovePropertyBtn({ propertyId, className = '' }: { pro
 			toast.error('Property ID is required')
 		}
 		// Check if the property is already approved
-		axios.get(`/api/admin/property/approve/${propertyId}`).then(res => {
-			if (res.status === 200) {
-				setAlreadyApproved(true)
-			} else {
-				setAlreadyApproved(false)
-			}
-		})
+		axios
+			.get(`/api/admin/property/approve/${propertyId}`)
+			.then(res => {
+				setAlreadyApproved(res.data.isApproved)
+			})
+			.catch(error => {
+				console.log(error)
+				throw new Error('Something went wrong')
+			})
 	}, [propertyId])
 
 	async function approveProperty() {
@@ -44,6 +46,7 @@ export default function ApprovePropertyBtn({ propertyId, className = '' }: { pro
 		}
 		setLoading(false)
 	}
+
 	return (
 		<Button className={cn(className)} onClick={approveProperty} disabled={alreadyApproved || loading}>
 			{alreadyApproved ? 'Property Already Approved' : loading ? <Loader className="animate-spin" /> : 'Approve Property'}

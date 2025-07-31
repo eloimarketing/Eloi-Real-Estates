@@ -39,7 +39,7 @@ export default function NavbarLinks({ user, cart }: { user: User | undefined; ca
 	const vendorFields = [
 		{ name: 'Home', href: '/', icon: Home, visible: true },
 		{ name: 'Add Property', href: '/seller/property/create', icon: Building, visible: true },
-		{ name: 'All Properties', href: '/seller/property', icon: Building2, visible: true },
+		{ name: 'My Properties', href: '/seller/property', icon: Building2, visible: true },
 		{ name: 'Profile', href: '/seller/profile', icon: UserIcon, visible: false },
 		{ name: 'Contact Us', href: '/contact', icon: Phone, visible: true },
 		{ name: 'About Us', href: '/terms-and-conditions', icon: Settings, visible: true },
