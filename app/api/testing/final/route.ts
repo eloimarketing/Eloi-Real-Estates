@@ -284,5 +284,5 @@ import { NextResponse } from 'next/server'
 // }
 
 export async function GET() {
-	return NextResponse.json({ name: 'Testing' })
+	return NextResponse.json({ name: 'These are the changes' })
 }
