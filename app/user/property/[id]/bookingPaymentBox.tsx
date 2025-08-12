@@ -77,23 +77,6 @@ export default function BookingPaymentForm({
 		form.trigger('selectedServices')
 	}
 
-	const getButtonText = () => {
-		const services = form.getValues('selectedServices') || []
-		const paymentItems = services.filter(item => item !== 'Book Site Visit (Free)')
-		const hasPayment = paymentItems.length > 0
-		const hasBooking = services.includes('Book Site Visit (Free)')
-
-		if (hasPayment && hasBooking) {
-			return 'Pay and Book'
-		} else if (hasBooking) {
-			return 'Book'
-		} else if (hasPayment) {
-			return 'Pay'
-		} else {
-			return 'Select Option'
-		}
-	}
-
 	const onSubmit = async (data: FormData) => {
 		console.log('obsubmit being run ', data)
 		const paymentItems = data.selectedServices.filter(item => item !== 'Book Site Visit (Free)')

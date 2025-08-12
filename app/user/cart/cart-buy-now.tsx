@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 
 declare global {
 	interface Window {
-		Razorpay: any
+		Razorpay: unknown
 	}
 }
 
@@ -51,7 +51,7 @@ export default function CartBuyNow({ propertyIds }: { propertyIds: string[] }) {
 				name: 'Your Company Name',
 				description: 'Property Purchase',
 				order_id: data.id,
-				handler: async function (response: any) {
+				handler: async function (response) {
 					// OPTIONAL: Call backend to verify payment
 					alert('Payment Successful! Payment ID: ' + response.razorpay_payment_id)
 				},
@@ -63,6 +63,7 @@ export default function CartBuyNow({ propertyIds }: { propertyIds: string[] }) {
 				theme: { color: '#0f172a' },
 			}
 
+			// @ts-expect-error // Razorpay global variable
 			const rzp = new window.Razorpay(options)
 			rzp.open()
 		} catch (error) {
