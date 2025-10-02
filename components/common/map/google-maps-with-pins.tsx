@@ -22,13 +22,14 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		markersRef.current.forEach(marker => marker.setMap(null))
 		markersRef.current = []
 
-		const center = { lat: 23.2599, lng: 77.4126 }
+		// const center = { lat: 20.5937, lng: 78.9629 }
 
 		// Create map if it doesn't exist
 		if (!mapInstanceRef.current) {
 			mapInstanceRef.current = new google.maps.Map(mapRef.current, {
-				zoom: 3,
-				center,
+				zoom: 5,
+				minZoom: 3,
+				// center,
 			})
 		}
 
