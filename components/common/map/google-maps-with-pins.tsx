@@ -35,7 +35,7 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		// Add markers for each property
 		properties.forEach(property => {
 			const marker = new google.maps.Marker({
-				position: { lat: property.lat, lng: property.lng },
+				position: { lat: property.lat || 0, lng: property.lng || 0 },
 				map: mapInstanceRef.current,
 				title: property.title,
 			})
@@ -46,7 +46,7 @@ const GoogleMapWithPins = ({ properties }: { properties: Property[] }) => {
 		if (properties.length > 0) {
 			const bounds = new google.maps.LatLngBounds()
 			properties.forEach(property => {
-				bounds.extend({ lat: property.lat, lng: property.lng })
+				bounds.extend({ lat: property.lat || 0, lng: property.lng || 0 })
 			})
 			mapInstanceRef.current?.fitBounds(bounds)
 		}
